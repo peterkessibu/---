@@ -31,7 +31,7 @@ export default function LandingPage() {
                                 <Button
                                     className="bg-white text-blue-500 hover:bg-blue-50"
                                     size="lg"
-                                    onClick={() => router.push('/signup-rider')} // Navigate to the rider sign-up page
+                                    onClick={() => router.push('/Rider')} // Navigate to the rider sign-up page
                                 >
                                     Sign Up as a Rider
                                 </Button>
@@ -40,7 +40,7 @@ export default function LandingPage() {
                                 <Button
                                     className="bg-white text-green-500 hover:bg-green-50"
                                     size="lg"
-                                    onClick={() => router.push('/get-shop')} // Navigate to the get a shop page
+                                    onClick={() => router.push('/UserValidation')} // Navigate to the get a shop page
                                 >
                                     Get a Shop
                                 </Button>

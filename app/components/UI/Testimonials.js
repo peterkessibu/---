@@ -1,6 +1,3 @@
-// components/Testimonials.js
-import { Card, CardHeader, CardContent, CardTitle, CardDescription } from "../UI/Card";
-
 export function Testimonials() {
     const testimonials = [
         { name: "Alice Johnson", role: "Fashion Boutique Owner", feedback: "This platform made it so easy to set up my online store. I was able to launch within a week!", avatar: "/placeholder.svg?height=40&width=40" },
@@ -14,19 +11,19 @@ export function Testimonials() {
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8">What Our Customers Say</h2>
                 <div className="grid gap-8 grid-cols-2 md:grid-cols-3">
                     {testimonials.map((testimonial) => (
-                        <Card key={testimonial.name}>
-                            <CardHeader>
+                        <div key={testimonial.name} className="bg-white shadow-lg rounded-lg p-6 flex flex-col h-64 justify-between">
+                            <div className="mb-4 text-center">
                                 <div className="flex items-center gap-4">
                                     <div>
-                                        <CardTitle>{testimonial.name}</CardTitle>
-                                        <CardDescription>{testimonial.role}</CardDescription>
+                                        <h3 className="text-lg font-bold text-center">{testimonial.name}</h3>
+                                        <div className="text-sm text-gray-500 text-center">{testimonial.role}</div>
                                     </div>
                                 </div>
-                            </CardHeader>
-                            <CardContent>
-                                {testimonial.feedback}
-                            </CardContent>
-                        </Card>
+                            </div>
+                            <div className="flex-grow text-gray-700 text-center flex items-center justify-center">
+                                <p>{testimonial.feedback}</p>
+                            </div>
+                        </div>
                     ))}
                 </div>
             </div>

@@ -1,5 +1,3 @@
-// components/Pricing.js
-import { Card, CardHeader, CardContent, CardTitle, CardDescription, CardFooter } from "../UI/Card";
 import { Check } from "lucide-react";
 import { Button } from "../UI/Button";
 
@@ -49,26 +47,26 @@ export function Pricing() {
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl mb-8">Choose Your Plan</h2>
                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
                     {plans.map((plan) => (
-                        <Card key={plan.title}>
-                            <CardHeader>
-                                <CardTitle>{plan.title}</CardTitle>
-                                <CardDescription>{plan.description}</CardDescription>
-                            </CardHeader>
-                            <CardContent>
+                        <div key={plan.title} className="bg-white shadow-lg rounded-lg p-6 flex flex-col h-full justify-between">
+                            <div className="mb-4 text-center">
+                                <h3 className="text-lg font-bold">{plan.title}</h3>
+                                <p className="text-sm text-gray-500">{plan.description}</p>
+                            </div>
+                            <div className="text-gray-700 text-center">
                                 <p className="text-4xl font-bold">{plan.price}</p>
                                 <ul className="mt-4 space-y-2">
                                     {plan.features.map((feature) => (
                                         <li key={feature} className="flex items-center">
-                                            <Check className="text-green-500 mr-2" />
+                                            <Check className="text-green-500 mr-2 w-12" />
                                             {feature}
                                         </li>
                                     ))}
                                 </ul>
-                            </CardContent>
-                            <CardFooter>
+                            </div>
+                            <div className="mt-4 text-center">
                                 <Button className="w-full">Choose {plan.title}</Button>
-                            </CardFooter>
-                        </Card>
+                            </div>
+                        </div>
                     ))}
                 </div>
             </div>

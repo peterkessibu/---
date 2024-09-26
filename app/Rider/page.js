@@ -1,50 +1,26 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import FormField from '../components/Context/Formcomponents/FormField';
 import FileUpload from '../components/Context/Formcomponents/FileUpload';
 import Modal from '../components/Context/Formcomponents/Modal';
 
-const StudentValidation = () => {
+const RiderValidation = () => {
     const [formData, setFormData] = useState({
         name: '',
-        residence: '',
-        address: '',
         age: '',
-        dob: '',
-        studentId: null,
+        residence: '',
+        vehicleLicense: '',
+        driverLicense: '',
+        passport: null,
         idCard: null,
     });
     const [error, setError] = useState('');
-    const [imagePreviews, setImagePreviews] = useState({ studentId: null, idCard: null });
+    const [imagePreviews, setImagePreviews] = useState({ passport: null, idCard: null });
     const [acceptedTerms, setAcceptedTerms] = useState(false);
     const [isPrivacyModalOpen, setPrivacyModalOpen] = useState(false);
     const [isTermsModalOpen, setTermsModalOpen] = useState(false);
-    const [privacyContent, setPrivacyContent] = useState('');
-    const [termsContent, setTermsContent] = useState('');
     const router = useRouter();
-
-    useEffect(() => {
-        const loadPrivacyContent = async () => {
-            const response = await fetch('/policies/privacy-policy.md');
-            const text = await response.text();
-            setPrivacyContent(text);
-        };
-
-        const loadTermsContent = async () => {
-            const response = await fetch('/policies/terms-and-conditions.md');
-            const text = await response.text();
-            setTermsContent(text);
-        };
-
-        if (isPrivacyModalOpen) {
-            loadPrivacyContent();
-        }
-
-        if (isTermsModalOpen) {
-            loadTermsContent();
-        }
-    }, [isPrivacyModalOpen, isTermsModalOpen]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -129,27 +105,13 @@ const StudentValidation = () => {
 
     return (
         <div className="container mx-auto p-6">
-            <h1 className="text-3xl font-semibold mb-6 text-center">Student Validation</h1>
+            <h1 className="text-3xl font-semibold mb-6 text-center">Rider Validation</h1>
             <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg">
                 {error && <p className="text-red-500 mb-4">{error}</p>}
                 <FormField
                     label="Name"
                     type="text"
                     value={formData.name}
-                    onChange={handleChange}
-                    required
-                />
-                <FormField
-                    label="Place of Residence"
-                    type="text"
-                    value={formData.residence}
-                    onChange={handleChange}
-                    required
-                />
-                <FormField
-                    label="Address"
-                    type="text"
-                    value={formData.address}
                     onChange={handleChange}
                     required
                 />
@@ -161,21 +123,35 @@ const StudentValidation = () => {
                     required
                 />
                 <FormField
-                    label="Date of Birth"
-                    type="date"
-                    value={formData.dob}
+                    label="Place of Residence"
+                    type="text"
+                    value={formData.residence}
+                    onChange={handleChange}
+                    required
+                />
+                <FormField
+                    label="Vehicle License Plate Number"
+                    type="text"
+                    value={formData.vehicleLicense}
+                    onChange={handleChange}
+                    required
+                />
+                <FormField
+                    label="Driver's License Number"
+                    type="text"
+                    value={formData.driverLicense}
                     onChange={handleChange}
                     required
                 />
 
                 <FileUpload
-                    label="Student ID Card"
-                    preview={imagePreviews.studentId}
-                    onFileChange={(e) => handleFileChange(e, 'studentId')}
-                    onDrop={(e) => handleDrop(e, 'studentId')}
+                    label="Passport Picture"
+                    preview={imagePreviews.passport}
+                    onFileChange={(e) => handleFileChange(e, 'passport')}
+                    onDrop={(e) => handleDrop(e, 'passport')}
                 />
                 <FileUpload
-                    label="Upload ID Card"
+                    label="ID Card"
                     preview={imagePreviews.idCard}
                     onFileChange={(e) => handleFileChange(e, 'idCard')}
                     onDrop={(e) => handleDrop(e, 'idCard')}
@@ -209,13 +185,13 @@ const StudentValidation = () => {
             {/* Modals for Privacy Policy and Terms & Conditions */}
             <Modal
                 title="Privacy Policy"
-                content={<div dangerouslySetInnerHTML={{ __html: privacyContent }} />}
+                content={<p>Your privacy policy content goes here.</p>}
                 isOpen={isPrivacyModalOpen}
                 onClose={() => setPrivacyModalOpen(false)}
             />
             <Modal
                 title="Terms and Conditions"
-                content={<div dangerouslySetInnerHTML={{ __html: termsContent }} />}
+                content={<p>Your terms and conditions content goes here.</p>}
                 isOpen={isTermsModalOpen}
                 onClose={() => setTermsModalOpen(false)}
             />
@@ -223,4 +199,4 @@ const StudentValidation = () => {
     );
 };
 
-export default StudentValidation;
+export default RiderValidation;
