@@ -3,7 +3,6 @@
 import { Header } from "./Header";
 import { KeyFeatures } from "./KeyFeatures";
 import { Testimonials } from "./Testimonials";
-import { Pricing } from "./Pricing";
 import { Footer } from "./Footer";
 import { Button } from "../UI/Button";
 import { useRouter } from "next/navigation"; // Import the Next.js router
@@ -27,20 +26,10 @@ export default function LandingPage() {
                                 </p>
                             </div>
                             <div className="flex space-x-4 justify-center">
-                                {/* Button for Sign Up as a Rider */}
-                                <Button
-                                    className="bg-white text-blue-500 hover:bg-blue-50"
-                                    size="lg"
-                                    onClick={() => router.push('/Rider')} // Navigate to the rider sign-up page
-                                >
-                                    Sign Up as a Rider
-                                </Button>
-
-                                {/* Button for Get a Shop */}
                                 <Button
                                     className="bg-white text-green-500 hover:bg-green-50"
                                     size="lg"
-                                    onClick={() => router.push('/UserValidation')} // Navigate to the get a shop page
+                                    onClick={() => router.push('/UserValidation')}
                                 >
                                     Get a Shop
                                 </Button>
@@ -49,7 +38,6 @@ export default function LandingPage() {
                     </div>
                 </section>
                 <KeyFeatures />
-                <Pricing />
                 <Testimonials />
             </main>
             <Footer />

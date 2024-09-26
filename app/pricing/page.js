@@ -1,7 +1,8 @@
+'use client'
 import { Check } from "lucide-react";
-import { Button } from "../UI/Button";
+import { Button } from "../components/UI/Button";
 
-export function Pricing() {
+export default function Pricing() {
     const plans = [
         {
             title: "Basic",
