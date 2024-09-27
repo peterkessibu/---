@@ -66,7 +66,7 @@ function SettingsSection() {
 // Menu items
 const menuItems = [
   { name: "Home", icon: Home, component: HomeSection },
-  { name: "Products", icon: Package, component: ProductSection }, // Added Products Section
+  { name: "Products", icon: Package, component: ProductSection },
   { name: "Inventory", icon: ListCheck, component: InventorySection },
   { name: "Customers", icon: Users, component: CustomersSection },
   { name: "Analytics", icon: BarChart2, component: AnalyticsSection },

@@ -8,8 +8,9 @@ import {
   Trash2,
 } from "lucide-react";
 import Image from "next/image";
+import ProductPage from "./product";
 
-// Sample inventory data
+
 const initialInventoryData = [
   {
     id: 1,
@@ -67,6 +68,11 @@ export default function InventoryTrackingPage() {
   });
   const [editingItem, setEditingItem] = useState(null);
 
+  // Handle adding new product to inventory
+  const saveToInventory = (newProduct) => {
+    setInventoryData([...inventoryData, { id: inventoryData.length + 1, ...newProduct }]);
+  };
+
   // Handle sorting
   const handleSort = (key) => {
     let direction = "ascending";
@@ -96,7 +102,7 @@ export default function InventoryTrackingPage() {
   // Save edited item
   const handleSave = () => {
     const updatedInventory = inventoryData.map((item) =>
-      item.id === editingItem.id ? editingItem : item,
+      item.id === editingItem.id ? editingItem : item
     );
     setInventoryData(updatedInventory);
     setEditingItem(null);
@@ -117,13 +123,13 @@ export default function InventoryTrackingPage() {
   const filteredItems = sortedItems.filter(
     (item) =>
       item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchTerm.toLowerCase()),
+      item.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Inventory Tracking</h1>
-
+      <ProductPage saveToInventory={saveToInventory} />
       <div className="mb-4 flex flex-col sm:flex-row justify-between items-center">
         <div className="relative w-full sm:w-64 mb-4 sm:mb-0">
           <input

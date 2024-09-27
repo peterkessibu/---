@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from 'next/image';
 import { Button } from "./components/home/homebutton";
 import { Input } from "./components/home/homeinput";
 import { Label } from "./components/home/homelabel";
@@ -8,9 +9,9 @@ import { Textarea } from "./components/home/hometextarea";
 import { Select, SelectItem } from "./components/home/homeselect";
 import { RadioGroup, RadioGroupItem } from "./components/home/homeradiogroup";
 import { Card, CardContent } from "./components/home/homecard";
-import { Bold, Italic, Underline, Image as ImageIcon } from "lucide-react";
+import { Image as ImageIcon } from "lucide-react";
 
-export default function ProductPage() {
+export default function ProductPage({ saveToInventory = () => { } }) {
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -19,9 +20,36 @@ export default function ProductPage() {
   const [profit, setProfit] = useState("");
   const [margin, setMargin] = useState("");
   const [status, setStatus] = useState("on page");
-  const [imageUrl, setImageUrl] = useState(
-    "/placeholder.svg?height=200&width=200",
-  );
+  const [imageUrl, setImageUrl] = useState("/placeholder.svg?height=200&width=200");
+
+  const handleSaveProduct = () => {
+    const newProduct = {
+      id: Date.now(),
+      name: productName,
+      description,
+      category,
+      price,
+      cost,
+      profit,
+      margin,
+      status,
+      image: imageUrl,
+      dateInput: new Date().toISOString().split('T')[0],
+      location: status === "inventory" ? "Inventory" : "On Page",
+    };
+    saveToInventory(newProduct);
+
+    // Reset form after saving
+    setProductName("");
+    setDescription("");
+    setCategory("");
+    setPrice("");
+    setCost("");
+    setProfit("");
+    setMargin("");
+    setStatus("on page");
+    setImageUrl("/placeholder.svg?height=200&width=200");
+  };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -32,32 +60,16 @@ export default function ProductPage() {
     }
   };
 
-  const formatText = (format) => {
-    const textarea = document.getElementById("description");
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selectedText = description.substring(start, end);
-    const beforeText = description.substring(0, start);
-    const afterText = description.substring(end);
-
-    switch (format) {
-      case "bold":
-        setDescription(`${beforeText}**${selectedText}**${afterText}`);
-        break;
-      case "italic":
-        setDescription(`${beforeText}*${selectedText}*${afterText}`);
-        break;
-      case "underline":
-        setDescription(`${beforeText}_${selectedText}_${afterText}`);
-        break;
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSaveProduct();
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Product Details</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
+        <form onSubmit={handleSubmit}>
           <Card>
             <CardContent>
               <div className="mb-4">
@@ -71,29 +83,6 @@ export default function ProductPage() {
               </div>
               <div className="mb-4">
                 <Label htmlFor="description">Description</Label>
-                <div className="flex gap-2 mb-2">
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => formatText("bold")}
-                  >
-                    <Bold className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => formatText("italic")}
-                  >
-                    <Italic className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => formatText("underline")}
-                  >
-                    <Underline className="h-4 w-4" />
-                  </Button>
-                </div>
                 <Textarea
                   id="description"
                   value={description}
@@ -172,7 +161,10 @@ export default function ProductPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
+          <div className="mt-8">
+            <Button type="submit">Save Product</Button>
+          </div>
+        </form>
         <div>
           <Card>
             <CardContent>
@@ -206,19 +198,16 @@ export default function ProductPage() {
                   </div>
                 </div>
               </div>
-              <div className="mt-4">
-                <img
-                  src={imageUrl}
-                  alt="Product"
-                  className="w-full h-auto rounded-lg"
-                />
-              </div>
+              <Image
+                src={imageUrl}
+                alt="Product"
+                className="w-full h-auto rounded-lg"
+                width={200}
+                height={200}
+              />
             </CardContent>
           </Card>
         </div>
-      </div>
-      <div className="mt-8">
-        <Button>Save Product</Button>
       </div>
     </div>
   );
