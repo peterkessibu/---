@@ -39,4 +39,4 @@ These terms shall be governed by and construed in accordance with the laws of [Y
 If you have any questions about these Terms and Conditions, please contact us at:
 
 **Email:** [Your Email Address]  
-**Address:** [Your Company Address]  
+**Address:** [Your Company Address]
