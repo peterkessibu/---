@@ -52,7 +52,7 @@ export function Header() {
         </Link>
         <Link
           className="text-white bg-blue-500 px-4 py-2 rounded hover:bg-blue-600 transition duration-300"
-          href="/start"
+          href="/aboutinfo"
         >
           Start free trial
         </Link>

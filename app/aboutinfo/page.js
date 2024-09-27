@@ -25,7 +25,7 @@ export default function FormCarousel() {
 
   const handleContinue = () => {
     if (currentForm === forms.length - 1) {
-      router.push("/pricing"); // Replace '/next-page' with the actual path you want to navigate to
+      router.push("/home");
     } else {
       nextForm();
     }

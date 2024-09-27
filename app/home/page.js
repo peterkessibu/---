@@ -13,9 +13,10 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import Homepage from "./components/homepage";
-import InventoryTrackingPage from "./components/inventorypage";
-import ProductPage from "./components/product";
+import Homepage from "../components/UI/home/components/home/homepage";
+import InventoryTrackingPage from "../components/UI/home/inventorypage";
+import ProductPage from "../components/UI/home/product";
+import AnalyticsPage from "../components/UI/home/analytics";
 
 // Components for each section
 function HomeSection() {
@@ -49,7 +50,7 @@ function CustomersSection() {
 }
 
 function AnalyticsSection() {
-  return <p>This is the analytics section where you review your metrics.</p>;
+  return <AnalyticsPage />;
 }
 
 function DiscountsSection() {

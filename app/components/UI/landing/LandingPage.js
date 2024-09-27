@@ -4,7 +4,7 @@ import { KeyFeatures } from "./KeyFeatures";
 import { Testimonials } from "./Testimonials";
 import FAQComponent from "./faqs"; // Ensure it's a default import
 import { Footer } from "./Footer";
-import { Button } from "../UI/Button";
+import { Button } from "./Button";
 import { useRouter } from "next/navigation"; // Import the Next.js router
 
 export default function LandingPage() {
@@ -30,9 +30,9 @@ export default function LandingPage() {
                 <Button
                   className="bg-white text-green-500 hover:bg-green-50"
                   size="lg"
-                  onClick={() => router.push("/UserValidation")}
+                  onClick={() => router.push("/aboutinfo")}
                 >
-                  Get a Shop
+                  Start Free Trial
                 </Button>
               </div>
             </div>
