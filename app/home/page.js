@@ -12,6 +12,7 @@ import {
   Settings,
   Menu,
   X,
+  Store,
 } from "lucide-react";
 import Homepage from "../components/UI/home/components/home/homepage";
 import InventoryTrackingPage from "../components/UI/home/inventorypage";
@@ -23,6 +24,14 @@ function HomeSection() {
   return (
     <div>
       <Homepage />
+    </div>
+  );
+}
+function OnlineStoreSection() {
+  return (
+    <div>
+      <h2 className="text-xl font-bold mb-4">Online Store</h2>
+      <p>This is the online store section where you manage your shop.</p>
     </div>
   );
 }
@@ -66,6 +75,7 @@ function SettingsSection() {
 // Menu items
 const menuItems = [
   { name: "Home", icon: Home, component: HomeSection },
+  { name: "Online Store", icon: Store, component: OnlineStoreSection },
   { name: "Products", icon: Package, component: ProductSection },
   { name: "Inventory", icon: ListCheck, component: InventorySection },
   { name: "Customers", icon: Users, component: CustomersSection },
