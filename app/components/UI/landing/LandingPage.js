@@ -2,7 +2,7 @@
 import { Header } from "./Header";
 import { KeyFeatures } from "./KeyFeatures";
 import { Testimonials } from "./Testimonials";
-import FAQComponent from "./faqs"; // Ensure it's a default import
+import FAQComponent from "./FAQs"; // Ensure it's a default import
 import { Footer } from "./Footer";
 import { Button } from "./Button";
 import { useRouter } from "next/navigation"; // Import the Next.js router
