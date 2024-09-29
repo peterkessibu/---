@@ -1,6 +1,5 @@
 "use client";
 import { Check } from "lucide-react";
-import PricingHeader from "./PricingHeader"; // Import the header
 
 function Button({ children, className, onClick }) {
   return (
@@ -55,7 +54,6 @@ export default function PricingPage() {
 
   return (
     <div>
-      <PricingHeader />
       <section
         id="pricing"
         className="flex flex-col h-screen justify-center items-center w-full"
