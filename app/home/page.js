@@ -14,10 +14,14 @@ import {
   X,
   Store,
 } from "lucide-react";
-import Homepage from "../components/UI/home/components/home/homepage";
-import InventoryTrackingPage from "../components/UI/home/inventorypage";
-import ProductPage from "../components/UI/home/product";
-import AnalyticsPage from "../components/UI/home/analytics";
+import Homepage from "./components/homepage";
+import InventoryTrackingPage from "../inventory/page";
+import ProductPage from "../products/page";
+import AnalyticsPage from "../analytics/page";
+import SettingsPage from "../settings/page";
+import DiscountsPage from "../discounts/page";
+import CustomersPage from "../customers/page";
+import StorePreview from "../preview/page";
 
 // Components for each section
 function HomeSection() {
@@ -28,12 +32,7 @@ function HomeSection() {
   );
 }
 function OnlineStoreSection() {
-  return (
-    <div>
-      <h2 className="text-xl font-bold mb-4">Online Store</h2>
-      <p>This is the online store section where you manage your shop.</p>
-    </div>
-  );
+  return <StorePreview />;
 }
 
 function ProductSection() {
@@ -53,9 +52,7 @@ function InventorySection() {
 }
 
 function CustomersSection() {
-  return (
-    <p>This is the customers section where you view and manage customers.</p>
-  );
+  return <CustomersPage />;
 }
 
 function AnalyticsSection() {
@@ -63,13 +60,11 @@ function AnalyticsSection() {
 }
 
 function DiscountsSection() {
-  return (
-    <p>This is the discounts section where you manage promotional discounts.</p>
-  );
+  return <DiscountsPage />;
 }
 
 function SettingsSection() {
-  return <p>This is the settings section where you configure your account.</p>;
+  return <SettingsPage />;
 }
 
 // Menu items
@@ -143,7 +138,6 @@ export default function DashboardLayout() {
       {/* Main content */}
       <main className="flex-1 p-8 overflow-auto">
         {ActiveComponent && <ActiveComponent />}{" "}
-        {/* Dynamically render the active section */}
       </main>
     </div>
   );

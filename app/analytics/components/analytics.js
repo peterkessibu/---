@@ -3,20 +3,21 @@
 import { useState, useEffect, useRef } from "react";
 import DatePicker from "react-datepicker"; // Import the date picker
 import "react-datepicker/dist/react-datepicker.css"; // Import CSS for the date picker
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "./components/analytics/analyticscard";
+import { Card, CardContent, CardHeader, CardTitle } from "./analyticscard";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./components/analytics/analyticsselect";
-import { DollarSign, Users, ShoppingCart, RefreshCcw, Calendar } from "lucide-react";
+} from "./analyticsselect";
+import {
+  DollarSign,
+  Users,
+  ShoppingCart,
+  RefreshCcw,
+  Calendar,
+} from "lucide-react";
 
 // Sample data for the charts
 const initialData = [
@@ -43,7 +44,7 @@ export default function AnalyticsPage() {
 
   // Function to refresh data
   const refreshData = () => {
-    const newData = initialData.map(item => ({
+    const newData = initialData.map((item) => ({
       ...item,
       sales: item.sales + Math.floor(Math.random() * 1000),
       profit: item.profit + Math.floor(Math.random() * 500),
@@ -115,7 +116,11 @@ export default function AnalyticsPage() {
             )}
           </div>
         </div>
-        <Select value={dateRange} onValueChange={setDateRange} className="ml-4 mb-4 md:mb-0">
+        <Select
+          value={dateRange}
+          onValueChange={setDateRange}
+          className="ml-4 mb-4 md:mb-0"
+        >
           <SelectTrigger className="w-[120px]">
             <SelectValue placeholder="Select range" />
           </SelectTrigger>
@@ -141,8 +146,12 @@ export default function AnalyticsPage() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${totalSales.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+            <div className="text-2xl font-bold">
+              ${totalSales.toLocaleString()}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              +20.1% from last month
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -151,18 +160,28 @@ export default function AnalyticsPage() {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">${totalProfit.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">+15.2% from last month</p>
+            <div className="text-2xl font-bold">
+              ${totalProfit.toLocaleString()}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              +15.2% from last month
+            </p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Online Store Sessions</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Online Store Sessions
+            </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalSessions.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">+5.2% from last month</p>
+            <div className="text-2xl font-bold">
+              {totalSessions.toLocaleString()}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              +5.2% from last month
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -171,8 +190,12 @@ export default function AnalyticsPage() {
             <ShoppingCart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{totalOrders.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">+12.5% from last month</p>
+            <div className="text-2xl font-bold">
+              {totalOrders.toLocaleString()}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              +12.5% from last month
+            </p>
           </CardContent>
         </Card>
       </div>

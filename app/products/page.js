@@ -1,10 +1,10 @@
 // page.js
-import PricingPage from "./components/PricingPage";
+import ProductPage from "./components/products";
 
 export default function Page() {
   return (
     <div className="h-screen w-full">
-      <PricingPage />
+      <ProductPage />
     </div>
   );
 }

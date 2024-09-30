@@ -1,17 +1,76 @@
 "use client";
 
 import { useState } from "react";
-import Image from 'next/image';
-import { Button } from "./components/home/homebutton";
-import { Input } from "./components/home/homeinput";
-import { Label } from "./components/home/homelabel";
-import { Textarea } from "./components/home/hometextarea";
-import { Select, SelectItem } from "./components/home/homeselect";
-import { RadioGroup, RadioGroupItem } from "./components/home/homeradiogroup";
-import { Card, CardContent } from "./components/home/homecard";
+import Image from "next/image";
 import { Image as ImageIcon } from "lucide-react";
 
-export default function ProductPage({ saveToInventory = () => { } }) {
+// Inline components
+const Button = ({ type, children }) => (
+  <button
+    type={type}
+    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+  >
+    {children}
+  </button>
+);
+
+const Input = ({ id, type = "text", value, onChange, placeholder }) => (
+  <input
+    id={id}
+    type={type}
+    value={value}
+    onChange={onChange}
+    placeholder={placeholder}
+    className="w-full p-2 border border-gray-300 rounded"
+  />
+);
+
+const Label = ({ htmlFor, children }) => (
+  <label htmlFor={htmlFor} className="block text-gray-700 font-medium mb-2">
+    {children}
+  </label>
+);
+
+const Textarea = ({ id, value, onChange, placeholder, rows }) => (
+  <textarea
+    id={id}
+    value={value}
+    onChange={onChange}
+    placeholder={placeholder}
+    rows={rows}
+    className="w-full p-2 border border-gray-300 rounded"
+  />
+);
+
+const Select = ({ value, onValueChange, children }) => (
+  <select
+    value={value}
+    onChange={(e) => onValueChange(e.target.value)}
+    className="w-full p-2 border border-gray-300 rounded"
+  >
+    {children}
+  </select>
+);
+
+const SelectItem = ({ value, children }) => (
+  <option value={value}>{children}</option>
+);
+
+const RadioGroup = ({ value, onValueChange, children }) => (
+  <div onChange={(e) => onValueChange(e.target.value)}>{children}</div>
+);
+
+const RadioGroupItem = ({ value, id }) => (
+  <input type="radio" value={value} id={id} name="status" className="mr-2" />
+);
+
+const Card = ({ children }) => (
+  <div className="border rounded-lg p-4 bg-white shadow">{children}</div>
+);
+
+const CardContent = ({ children }) => <div>{children}</div>;
+
+export default function ProductPage({ saveToInventory = () => {} }) {
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -20,7 +79,9 @@ export default function ProductPage({ saveToInventory = () => { } }) {
   const [profit, setProfit] = useState("");
   const [margin, setMargin] = useState("");
   const [status, setStatus] = useState("on page");
-  const [imageUrl, setImageUrl] = useState("/placeholder.svg?height=200&width=200");
+  const [imageUrl, setImageUrl] = useState(
+    "/placeholder.svg?height=200&width=200",
+  );
 
   const handleSaveProduct = () => {
     const newProduct = {
@@ -34,7 +95,7 @@ export default function ProductPage({ saveToInventory = () => { } }) {
       margin,
       status,
       image: imageUrl,
-      dateInput: new Date().toISOString().split('T')[0],
+      dateInput: new Date().toISOString().split("T")[0],
       location: status === "inventory" ? "Inventory" : "On Page",
     };
     saveToInventory(newProduct);
