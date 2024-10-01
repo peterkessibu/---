@@ -24,7 +24,7 @@ const InventoryPage = () => {
     },
   ]);
 
-  const handleEdit = (id) => {
+  const handleEdit = () => {
     // Implement edit functionality
   };
 

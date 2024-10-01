@@ -74,8 +74,8 @@ const menuItems = [
   { name: "Products", icon: Package, component: ProductSection },
   { name: "Inventory", icon: ListCheck, component: InventorySection },
   { name: "Customers", icon: Users, component: CustomersSection },
-  { name: "Analytics", icon: BarChart2, component: AnalyticsSection },
   { name: "Discounts", icon: Tag, component: DiscountsSection },
+  { name: "Analytics", icon: BarChart2, component: AnalyticsSection },
   { name: "Settings", icon: Settings, component: SettingsSection },
 ];
 

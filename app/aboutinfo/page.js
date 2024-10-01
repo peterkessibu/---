@@ -76,7 +76,9 @@ export default function FormCarousel() {
 function BusinessIdeaForm() {
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">What's your business idea?</h2>
+      <h2 className="text-xl font-semibold mb-4">
+        What&apos;s your business idea?
+      </h2>
       <input
         type="text"
         className="w-full px-4 py-2 border border-gray-300 rounded-md"

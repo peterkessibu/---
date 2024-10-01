@@ -56,7 +56,7 @@ const SelectItem = ({ value, children }) => (
   <option value={value}>{children}</option>
 );
 
-const RadioGroup = ({ value, onValueChange, children }) => (
+const RadioGroup = ({ onValueChange, children }) => (
   <div onChange={(e) => onValueChange(e.target.value)}>{children}</div>
 );
 
