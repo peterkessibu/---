@@ -117,10 +117,9 @@ export default function DashboardLayout() {
               href="#"
               className={`
                 flex items-center px-4 py-2 mb-2 rounded-md transition-colors duration-200
-                ${
-                  activeItem === item.name
-                    ? "bg-blue-100 text-blue-600"
-                    : "text-gray-600 hover:bg-gray-100"
+                ${activeItem === item.name
+                  ? "bg-blue-100 text-blue-600"
+                  : "text-gray-600 hover:bg-gray-100"
                 }
               `}
               onClick={() => {
