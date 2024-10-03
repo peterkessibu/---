@@ -73,9 +73,8 @@ export default function ProductPage({ saveToInventory = () => { } }) {
   const [overallProfit, setOverallProfit] = useState("");
   const [totalRevenue, setTotalRevenue] = useState("");
   const [status, setStatus] = useState("inventory");
-  const [imageUrl, setImageUrl] = useState(
-    "/placeholder.svg?height=200&width=200"
-  );
+  const [imageUrl, setImageUrl] = useState("/placeholder.svg?height=200&width=200");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleSaveProduct = () => {
     const newProduct = {
@@ -107,11 +106,18 @@ export default function ProductPage({ saveToInventory = () => { } }) {
     setTotalRevenue("");
     setStatus("inventory");
     setImageUrl("/placeholder.svg?height=200&width=200");
+    setErrorMessage(""); // Reset error message
   };
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
+      const validTypes = ["image/jpeg", "image/png", "image/gif"];
+      if (!validTypes.includes(file.type)) {
+        setErrorMessage("Please upload a valid image (JPEG, PNG, GIF).");
+        return;
+      }
+      setErrorMessage(""); // Clear error message
       const reader = new FileReader();
       reader.onload = (e) => setImageUrl(e.target.result);
       reader.readAsDataURL(file);
@@ -276,31 +282,46 @@ export default function ProductPage({ saveToInventory = () => { } }) {
             <Button type="submit">Save Product</Button>
           </div>
         </form>
-        <div>
-          <Card>
-            <CardContent>
+
+        <Card>
+          <CardContent>
+            <div className="flex flex-col items-center">
               <div className="mb-4">
-                <Label>Product Image</Label>
-                <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25">
-                  <Image
-                    src={imageUrl}
-                    alt="Product Image"
-                    width={200}
-                    height={200}
-                    className="object-cover"
-                  />
-                </div>
-                <div className="mt-4">
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                  />
+                <Label>Image Preview</Label>
+                <div
+                  className="relative w-48 h-48 border border-dashed border-gray-400 flex justify-center items-center cursor-pointer"
+                  onClick={() => document.getElementById("imageUpload").click()}
+                >
+                  {imageUrl ? (
+                    <Image
+                      src={imageUrl}
+                      alt="Product Image"
+                      layout="fill"
+                      objectFit="cover"
+                      className="rounded"
+                    />
+                  ) : (
+                    <ImageIcon className="text-gray-400 w-12 h-12" />
+                  )}
+                  {errorMessage && <p className="text-red-500">{errorMessage}</p>}
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </div>
+              <input
+                type="file"
+                accept="image/jpeg, image/png, image/gif"
+                id="imageUpload"
+                className="hidden"
+                onChange={handleImageUpload}
+              />
+              <Button
+                type="button"
+                onClick={() => document.getElementById("imageUpload").click()}
+              >
+                Upload Image
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
