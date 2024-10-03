@@ -61,7 +61,6 @@ const InventoryPage = () => {
       <div className="mb-4 text-lg text-gray-700">
         <p>Total Items: <strong>{filteredInventory.length}</strong></p>
       </div>
-
       <div className="mb-4 items-center justify-center mx-auto">
         <input
           type="text"

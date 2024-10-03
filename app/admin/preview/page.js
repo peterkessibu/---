@@ -1,100 +1,199 @@
-// pages/admin/preview.js
-"use client";
-import React, { useState } from "react";
+'use client';
+import React, { useState } from 'react';
+import {
+  ShoppingCart,
+  User,
+  CreditCard,
+  Eye,
+  Smartphone,
+  Tablet,
+  Monitor,
+  DollarSign,
+} from 'lucide-react';
 
-const StorePreview = () => {
-  const [viewMode, setViewMode] = useState("desktop");
+const EcommercePreview = () => {
+  const [previewMode, setPreviewMode] = useState('desktop');
+  const [showFullPreview, setShowFullPreview] = useState(false);
+  const [cart, setCart] = useState([]);
+  const [user, setUser] = useState(null);
 
-  const previewContent = (
-    <div className="bg-white p-4 rounded-lg shadow">
-      <h1 className="text-2xl font-bold mb-4">Your Online Store</h1>
-      <nav className="mb-4">
-        <ul className="flex space-x-4">
-          <li>
-            <a href="#" className="text-blue-500 hover:underline">
-              Home
-            </a>
-          </li>
-          <li>
-            <a href="#" className="text-blue-500 hover:underline">
-              Products
-            </a>
-          </li>
-          <li>
-            <a href="#" className="text-blue-500 hover:underline">
-              About
-            </a>
-          </li>
-          <li>
-            <a href="#" className="text-blue-500 hover:underline">
-              Contact
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="border p-4 rounded">
-          <h2 className="text-lg font-semibold">Product 1</h2>
-          <p className="text-gray-600">$19.99</p>
-          <button className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
-            Add to Cart
-          </button>
-        </div>
-        <div className="border p-4 rounded">
-          <h2 className="text-lg font-semibold">Product 2</h2>
-          <p className="text-gray-600">$24.99</p>
-          <button className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
-            Add to Cart
-          </button>
-        </div>
-        <div className="border p-4 rounded">
-          <h2 className="text-lg font-semibold">Product 3</h2>
-          <p className="text-gray-600">$14.99</p>
-          <button className="mt-2 bg-blue-500 text-white px-4 py-2 rounded">
-            Add to Cart
-          </button>
-        </div>
-      </div>
+  // Sample e-commerce items
+  const ecommerceItems = [
+    { id: 1, name: 'Product 1', unitPrice: 29.99, quantity: 10 },
+    { id: 2, name: 'Product 2', unitPrice: 19.99, quantity: 5 },
+    { id: 3, name: 'Product 3', unitPrice: 49.99, quantity: 2 },
+  ];
+
+  const handleAddToCart = (item) => {
+    setCart([...cart, item]);
+  };
+
+  const handleRemoveFromCart = (itemId) => {
+    setCart(cart.filter(item => item.id !== itemId));
+  };
+
+  const handleSignUp = () => {
+    setUser({ id: 1, name: 'John Doe', email: 'john@example.com' });
+  };
+
+  const handleSignIn = () => {
+    setUser({ id: 1, name: 'John Doe', email: 'john@example.com' });
+  };
+
+  const handleSignOut = () => {
+    setUser(null);
+  };
+
+  const handleCheckout = () => {
+    alert('Checkout process initiated. This would typically redirect to a payment gateway.');
+  };
+
+  const handleViewWebsite = () => {
+    setShowFullPreview(true);
+  };
+
+  const handlePlan = () => {
+    alert('Redirecting to pricing page...');
+  };
+
+  const PreviewFrame = ({ children }) => {
+    let frameClass = 'w-full h-[600px] bg-white shadow-lg rounded-lg overflow-hidden';
+    if (previewMode === 'mobile') frameClass += ' max-w-[375px]';
+    if (previewMode === 'tablet') frameClass += ' max-w-[768px]';
+
+    return <div className={frameClass}>{children}</div>;
+  };
+
+  const Button = ({ onClick, children, variant = 'default' }) => {
+    const baseStyle = 'px-4 py-2 rounded focus:outline-none';
+    const variantStyle = variant === 'destructive' ? 'bg-red-600 text-white' : 'bg-gray-700 text-white';
+    return (
+      <button className={`${baseStyle} ${variantStyle}`} onClick={onClick}>
+        {children}
+      </button>
+    );
+  };
+
+  const Card = ({ children }) => (
+    <div className="border border-gray-300 rounded-lg shadow p-4 bg-gray-100">
+      {children}
+    </div>
+  );
+
+  const CardHeader = ({ children }) => (
+    <div className="font-bold text-lg mb-2 text-black">
+      {children}
+    </div>
+  );
+
+  const CardContent = ({ children }) => (
+    <div className="text-sm mb-4 text-black">
+      {children}
+    </div>
+  );
+
+  const CardFooter = ({ children }) => (
+    <div className="flex justify-end">
+      {children}
     </div>
   );
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Online Store Preview</h2>
-      <div className="mb-4">
-        <label className="mr-2">View Mode:</label>
-        <select
-          value={viewMode}
-          onChange={(e) => setViewMode(e.target.value)}
-          className="border rounded p-1"
-        >
-          <option value="desktop">Desktop</option>
-          <option value="tablet">Tablet</option>
-          <option value="mobile">Mobile</option>
-        </select>
-      </div>
-      <div
-        className={`
-        border-4 border-gray-300 rounded-lg overflow-hidden
-        ${viewMode === "desktop" ? "w-full" : viewMode === "tablet" ? "w-2/3 mx-auto" : "w-1/3 mx-auto"}
-      `}
-      >
-        <div className="bg-gray-200 p-2 flex justify-between items-center">
-          <div className="flex space-x-2">
-            <div className="w-3 h-3 rounded-full bg-red-500"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500"></div>
-          </div>
-          <div className="bg-white rounded px-2 py-1 text-sm">
-            {viewMode === "desktop" ? "www.yourstore.com" : "yourstore.com"}
-          </div>
+    <div className="p-6 bg-gray-800 text-white min-h-screen">
+      <h1 className="text-3xl font-bold mb-6">E-commerce Website Preview</h1>
+
+      <div className="flex justify-between mb-4">
+        <div className="flex space-x-2">
+          <Button onClick={() => setPreviewMode('mobile')} variant={previewMode === 'mobile' ? 'default' : 'outline'}>
+            <Smartphone className="w-5 h-5" />
+          </Button>
+          <Button onClick={() => setPreviewMode('tablet')} variant={previewMode === 'tablet' ? 'default' : 'outline'}>
+            <Tablet className="w-5 h-5" />
+          </Button>
+          <Button onClick={() => setPreviewMode('desktop')} variant={previewMode === 'desktop' ? 'default' : 'outline'}>
+            <Monitor className="w-5 h-5" />
+          </Button>
         </div>
-        <div className={`bg-gray-100 ${viewMode === "mobile" ? "p-2" : "p-4"}`}>
-          {previewContent}
+        <div className="flex space-x-2">
+          <Button onClick={handleViewWebsite}>
+            <Eye className="w-5 h-5 mr-2" /> View Website
+          </Button>
+          <Button onClick={handlePlan}>
+            <DollarSign className="w-5 h-5 mr-2" /> Plans
+          </Button>
         </div>
       </div>
+
+      <PreviewFrame>
+        {showFullPreview ? (
+          <div className="p-4">
+            <header className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">Your E-commerce Store</h2>
+              <nav className="flex space-x-4">
+                {user ? (
+                  <>
+                    <span>Welcome, {user.name}</span>
+                    <button onClick={handleSignOut} className="text-blue-400">Sign Out</button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={handleSignUp} className="text-blue-400">Sign Up</button>
+                    <button onClick={handleSignIn} className="text-blue-400">Sign In</button>
+                  </>
+                )}
+                <button className="relative">
+                  <ShoppingCart className="w-6 h-6" />
+                  {cart.length > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                      {cart.length}
+                    </span>
+                  )}
+                </button>
+              </nav>
+            </header>
+
+            <main>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {ecommerceItems.map(item => (
+                  <Card key={item.id}>
+                    <CardHeader>
+                      <h3 className="text-lg font-semibold">{item.name}</h3>
+                    </CardHeader>
+                    <CardContent>
+                      <p>${item.unitPrice.toFixed(2)}</p>
+                      <p>Quantity: {item.quantity}</p>
+                    </CardContent>
+                    <CardFooter>
+                      <Button onClick={() => handleAddToCart(item)}>Add to Cart</Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </div>
+            </main>
+
+            {cart.length > 0 && (
+              <div className="mt-8">
+                <h3 className="text-xl font-bold mb-4">Shopping Cart</h3>
+                {cart.map(item => (
+                  <div key={item.id} className="flex justify-between items-center mb-2">
+                    <span>{item.name} - ${item.unitPrice.toFixed(2)}</span>
+                    <Button onClick={() => handleRemoveFromCart(item.id)} variant="destructive">Remove</Button>
+                  </div>
+                ))}
+                <Button onClick={handleCheckout} className="mt-4">
+                  <CreditCard className="w-5 h-5 mr-2" /> Proceed to Checkout
+                </Button>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="p-4 flex items-center justify-center h-full">
+            <p className="text-xl text-gray-300">Click "View Website" to see the full preview</p>
+          </div>
+        )}
+      </PreviewFrame>
     </div>
   );
 };
 
-export default StorePreview;
+export default EcommercePreview;
