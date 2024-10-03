@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Edit, Trash } from 'lucide-react';
+import { Edit, Trash } from "lucide-react";
 
 const InventoryPage = () => {
   const [inventory, setInventory] = useState([
@@ -39,27 +39,31 @@ const InventoryPage = () => {
   const handleStatusChange = (id, newStatus) => {
     setInventory(
       inventory.map((item) =>
-        item.id === id ? { ...item, status: newStatus } : item
-      )
+        item.id === id ? { ...item, status: newStatus } : item,
+      ),
     );
   };
 
   const handleSave = (id) => {
     setInventory(
-      inventory.map((item) => (item.id === id ? (editId === id ? updatedItem : item) : item))
+      inventory.map((item) =>
+        item.id === id ? (editId === id ? updatedItem : item) : item,
+      ),
     );
     setEditId(null);
   };
 
   const filteredInventory = inventory.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    item.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h2 className="text-3xl font-bold mb-6 text-gray-800">Inventory</h2>
       <div className="mb-4 text-lg text-gray-700">
-        <p>Total Items: <strong>{filteredInventory.length}</strong></p>
+        <p>
+          Total Items: <strong>{filteredInventory.length}</strong>
+        </p>
       </div>
       <div className="mb-4 items-center justify-center mx-auto">
         <input
@@ -73,7 +77,10 @@ const InventoryPage = () => {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredInventory.map((item) => (
-          <div key={item.id} className={`bg-white shadow-lg rounded-lg p-8 relative ${editId === item.id ? 'h-auto' : 'h-80'}`}>
+          <div
+            key={item.id}
+            className={`bg-white shadow-lg rounded-lg p-8 relative ${editId === item.id ? "h-auto" : "h-80"}`}
+          >
             <div className="absolute top-4 right-4 flex space-x-2">
               {editId !== item.id && (
                 <>
@@ -98,34 +105,50 @@ const InventoryPage = () => {
                 <input
                   type="text"
                   value={updatedItem.name}
-                  onChange={(e) => setUpdatedItem({ ...updatedItem, name: e.target.value })}
+                  onChange={(e) =>
+                    setUpdatedItem({ ...updatedItem, name: e.target.value })
+                  }
                   className="border rounded p-1 mb-2 w-full"
                   placeholder="Product Name"
                 />
                 <input
                   type="text"
                   value={updatedItem.category}
-                  onChange={(e) => setUpdatedItem({ ...updatedItem, category: e.target.value })}
+                  onChange={(e) =>
+                    setUpdatedItem({ ...updatedItem, category: e.target.value })
+                  }
                   className="border rounded p-1 mb-2 w-full"
                   placeholder="Category"
                 />
                 <input
                   type="number"
                   value={updatedItem.price}
-                  onChange={(e) => setUpdatedItem({ ...updatedItem, price: parseFloat(e.target.value) })}
+                  onChange={(e) =>
+                    setUpdatedItem({
+                      ...updatedItem,
+                      price: parseFloat(e.target.value),
+                    })
+                  }
                   className="border rounded p-1 mb-2 w-full"
                   placeholder="Price"
                 />
                 <input
                   type="number"
                   value={updatedItem.quantity}
-                  onChange={(e) => setUpdatedItem({ ...updatedItem, quantity: parseInt(e.target.value) })}
+                  onChange={(e) =>
+                    setUpdatedItem({
+                      ...updatedItem,
+                      quantity: parseInt(e.target.value),
+                    })
+                  }
                   className="border rounded p-1 mb-2 w-full"
                   placeholder="Quantity"
                 />
                 <select
                   value={updatedItem.status}
-                  onChange={(e) => setUpdatedItem({ ...updatedItem, status: e.target.value })}
+                  onChange={(e) =>
+                    setUpdatedItem({ ...updatedItem, status: e.target.value })
+                  }
                   className="border rounded p-1 mb-2 w-full"
                 >
                   <option value="Inventory">Inventory</option>
@@ -142,14 +165,25 @@ const InventoryPage = () => {
               </>
             ) : (
               <>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{item.name}</h3>
-                <p className="text-gray-700"><strong>Category:</strong> {item.category}</p>
-                <p className="text-gray-700"><strong>Price:</strong> ${item.price.toFixed(2)}</p>
-                <p className="text-gray-700"><strong>Quantity:</strong> {item.quantity}</p>
-                <p className="text-gray-700"><strong>Status:</strong>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  {item.name}
+                </h3>
+                <p className="text-gray-700">
+                  <strong>Category:</strong> {item.category}
+                </p>
+                <p className="text-gray-700">
+                  <strong>Price:</strong> ${item.price.toFixed(2)}
+                </p>
+                <p className="text-gray-700">
+                  <strong>Quantity:</strong> {item.quantity}
+                </p>
+                <p className="text-gray-700">
+                  <strong>Status:</strong>
                   <select
                     value={item.status}
-                    onChange={(e) => handleStatusChange(item.id, e.target.value)}
+                    onChange={(e) =>
+                      handleStatusChange(item.id, e.target.value)
+                    }
                     className="border rounded p-1 ml-1"
                   >
                     <option value="Inventory">Inventory</option>
@@ -157,7 +191,8 @@ const InventoryPage = () => {
                   </select>
                 </p>
                 <p className="text-gray-700">
-                  <strong>Date/Time Added:</strong> {new Date(item.dateAdded).toLocaleString()}
+                  <strong>Date/Time Added:</strong>{" "}
+                  {new Date(item.dateAdded).toLocaleString()}
                 </p>
                 <div className="mt-4">
                   <button

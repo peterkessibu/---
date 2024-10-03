@@ -1,57 +1,79 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import { PlusIcon, MinusIcon } from 'lucide-react'
+import React, { useState } from "react";
+import { PlusIcon, MinusIcon } from "lucide-react";
 
 export default function Component() {
   const [discounts, setDiscounts] = useState([
-    { id: 1, product: 'Product 1', discountType: 'percentage', value: 10, active: true },
-    { id: 2, product: 'Product 2', discountType: 'value', value: 5, active: false },
-  ])
+    {
+      id: 1,
+      product: "Product 1",
+      discountType: "percentage",
+      value: 10,
+      active: true,
+    },
+    {
+      id: 2,
+      product: "Product 2",
+      discountType: "value",
+      value: 5,
+      active: false,
+    },
+  ]);
 
   const [newDiscount, setNewDiscount] = useState({
-    product: '',
-    discountType: 'percentage',
-    value: '',
+    product: "",
+    discountType: "percentage",
+    value: "",
     active: false,
-  })
+  });
 
   const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type, checked } = e.target;
     setNewDiscount((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value,
-    }))
-  }
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    setDiscounts((prev) => [...prev, { ...newDiscount, id: Date.now() }])
+    e.preventDefault();
+    setDiscounts((prev) => [...prev, { ...newDiscount, id: Date.now() }]);
     setNewDiscount({
-      product: '',
-      discountType: 'percentage',
-      value: '',
+      product: "",
+      discountType: "percentage",
+      value: "",
       active: false,
-    })
-  }
+    });
+  };
 
   const toggleDiscountStatus = (id) => {
     setDiscounts((prev) =>
       prev.map((discount) =>
-        discount.id === id ? { ...discount, active: !discount.active } : discount
-      )
-    )
-  }
+        discount.id === id
+          ? { ...discount, active: !discount.active }
+          : discount,
+      ),
+    );
+  };
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <h1 className="text-3xl font-bold text-gray-900">Discounts Management</h1>
 
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6 space-y-4">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Add New Discount</h2>
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-md rounded-lg p-6 space-y-4"
+      >
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          Add New Discount
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label htmlFor="product" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="product"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Product
             </label>
             <input
@@ -65,7 +87,10 @@ export default function Component() {
             />
           </div>
           <div>
-            <label htmlFor="discountType" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="discountType"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Discount Type
             </label>
             <select
@@ -80,7 +105,10 @@ export default function Component() {
             </select>
           </div>
           <div>
-            <label htmlFor="value" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="value"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Discount Value
             </label>
             <input
@@ -102,7 +130,10 @@ export default function Component() {
               onChange={handleInputChange}
               className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
             />
-            <label htmlFor="active" className="ml-2 block text-sm text-gray-900">
+            <label
+              htmlFor="active"
+              className="ml-2 block text-sm text-gray-900"
+            >
               Active
             </label>
           </div>
@@ -116,24 +147,38 @@ export default function Component() {
       </form>
 
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
-        <h2 className="text-xl font-semibold text-gray-800 p-4 border-b">Active Discounts</h2>
+        <h2 className="text-xl font-semibold text-gray-800 p-4 border-b">
+          Active Discounts
+        </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
           {discounts.map((discount) => (
-            <div key={discount.id} className="bg-white shadow-md rounded-lg p-4 flex flex-col justify-between">
+            <div
+              key={discount.id}
+              className="bg-white shadow-md rounded-lg p-4 flex flex-col justify-between"
+            >
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">{discount.product}</h3>
-                <p className="text-sm text-gray-500">{discount.discountType === 'percentage' ? `${discount.value}%` : `$${discount.value}`}</p>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {discount.product}
+                </h3>
+                <p className="text-sm text-gray-500">
+                  {discount.discountType === "percentage"
+                    ? `${discount.value}%`
+                    : `$${discount.value}`}
+                </p>
               </div>
               <div className="flex items-center justify-between mt-4">
-                <span className={`px-2 py-1 inline-flex text-xs font-semibold rounded-full ${discount.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                  {discount.active ? 'Active' : 'Inactive'}
+                <span
+                  className={`px-2 py-1 inline-flex text-xs font-semibold rounded-full ${discount.active ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}
+                >
+                  {discount.active ? "Active" : "Inactive"}
                 </span>
                 <button
                   onClick={() => toggleDiscountStatus(discount.id)}
-                  className={`inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-full shadow-sm text-white ${discount.active
-                    ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500'
-                    : 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
-                    } focus:outline-none focus:ring-2 focus:ring-offset-2`}
+                  className={`inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-full shadow-sm text-white ${
+                    discount.active
+                      ? "bg-red-600 hover:bg-red-700 focus:ring-red-500"
+                      : "bg-green-600 hover:bg-green-700 focus:ring-green-500"
+                  } focus:outline-none focus:ring-2 focus:ring-offset-2`}
                 >
                   {discount.active ? (
                     <>
@@ -153,5 +198,5 @@ export default function Component() {
         </div>
       </div>
     </div>
-  )
+  );
 }

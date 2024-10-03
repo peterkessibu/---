@@ -1,10 +1,10 @@
-'use client'
-import { useState } from "react"
-import ProfileSettingsForm  from "./components/profilesettings"
-import OnlineStoreSettingsForm  from "./components/storesettings"
+"use client";
+import { useState } from "react";
+import ProfileSettingsForm from "./components/profilesettings";
+import OnlineStoreSettingsForm from "./components/storesettings";
 
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState("profile")
+  const [activeTab, setActiveTab] = useState("profile");
 
   return (
     <div className="container mx-auto py-10">
@@ -40,5 +40,5 @@ export default function SettingsPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

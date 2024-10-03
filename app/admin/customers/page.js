@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import React, { useState } from 'react'
-import { Clock } from 'lucide-react'
+import React, { useState } from "react";
+import { Clock } from "lucide-react";
 
 export default function Component() {
-  const currentTime = new Date().toISOString()
+  const currentTime = new Date().toISOString();
 
   const [customers, setCustomers] = useState([
     {
@@ -17,31 +17,36 @@ export default function Component() {
       name: "Jane Smith",
       purchases: [],
     },
-  ])
+  ]);
 
-  const [filter, setFilter] = useState("all")
+  const [filter, setFilter] = useState("all");
 
   const filteredCustomers =
     filter === "all"
       ? customers
       : filter === "purchased"
         ? customers.filter((c) => c.purchases.length > 0)
-        : customers
+        : customers;
 
   const formatUTCToGMT = (timestamp) => {
     return new Date(timestamp).toLocaleString("en-GB", {
       timeZone: "GMT",
       hour12: false,
-    })
-  }
+    });
+  };
 
   return (
     <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">Customer Management</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
+          Customer Management
+        </h1>
 
         <div className="mb-6">
-          <label htmlFor="filter" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="filter"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             Filter:
           </label>
           <select
@@ -60,10 +65,16 @@ export default function Component() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Customer Name
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th
+                    scope="col"
+                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
                     Purchases
                   </th>
                 </tr>
@@ -72,15 +83,23 @@ export default function Component() {
                 {filteredCustomers.map((customer) => (
                   <tr key={customer.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-medium text-gray-900">{customer.name}</div>
+                      <div className="text-sm font-medium text-gray-900">
+                        {customer.name}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm text-gray-500">
                         {customer.purchases.length > 0 ? (
                           customer.purchases.map((purchase, index) => (
-                            <div key={index} className="flex items-center space-x-1 mb-1">
+                            <div
+                              key={index}
+                              className="flex items-center space-x-1 mb-1"
+                            >
                               <Clock className="h-4 w-4 text-gray-400 flex-shrink-0" />
-                              <span className="truncate">{purchase.item} - {formatUTCToGMT(purchase.timestamp)}</span>
+                              <span className="truncate">
+                                {purchase.item} -{" "}
+                                {formatUTCToGMT(purchase.timestamp)}
+                              </span>
                             </div>
                           ))
                         ) : (
@@ -96,5 +115,5 @@ export default function Component() {
         </div>
       </div>
     </div>
-  )
+  );
 }
