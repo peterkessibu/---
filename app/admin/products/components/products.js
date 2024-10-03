@@ -56,31 +56,25 @@ const SelectItem = ({ value, children }) => (
   <option value={value}>{children}</option>
 );
 
-const RadioGroup = ({ onValueChange, children }) => (
-  <div onChange={(e) => onValueChange(e.target.value)}>{children}</div>
-);
-
-const RadioGroupItem = ({ value, id }) => (
-  <input type="radio" value={value} id={id} name="status" className="mr-2" />
-);
-
 const Card = ({ children }) => (
   <div className="border rounded-lg p-4 bg-white shadow">{children}</div>
 );
 
 const CardContent = ({ children }) => <div>{children}</div>;
 
-export default function ProductPage({ saveToInventory = () => {} }) {
+export default function ProductPage({ saveToInventory = () => { } }) {
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [price, setPrice] = useState("");
+  const [unitPrice, setUnitPrice] = useState("");
+  const [quantity, setQuantity] = useState("");
   const [cost, setCost] = useState("");
-  const [profit, setProfit] = useState("");
-  const [margin, setMargin] = useState("");
-  const [status, setStatus] = useState("on page");
+  const [profitPerUnit, setProfitPerUnit] = useState("");
+  const [overallProfit, setOverallProfit] = useState("");
+  const [totalRevenue, setTotalRevenue] = useState("");
+  const [status, setStatus] = useState("inventory");
   const [imageUrl, setImageUrl] = useState(
-    "/placeholder.svg?height=200&width=200",
+    "/placeholder.svg?height=200&width=200"
   );
 
   const handleSaveProduct = () => {
@@ -89,14 +83,15 @@ export default function ProductPage({ saveToInventory = () => {} }) {
       name: productName,
       description,
       category,
-      price,
+      unitPrice,
+      quantity,
       cost,
-      profit,
-      margin,
+      profitPerUnit,
+      overallProfit,
+      totalRevenue,
       status,
       image: imageUrl,
       dateInput: new Date().toISOString().split("T")[0],
-      location: status === "inventory" ? "Inventory" : "On Page",
     };
     saveToInventory(newProduct);
 
@@ -104,11 +99,13 @@ export default function ProductPage({ saveToInventory = () => {} }) {
     setProductName("");
     setDescription("");
     setCategory("");
-    setPrice("");
+    setUnitPrice("");
+    setQuantity("");
     setCost("");
-    setProfit("");
-    setMargin("");
-    setStatus("on page");
+    setProfitPerUnit("");
+    setOverallProfit("");
+    setTotalRevenue("");
+    setStatus("inventory");
     setImageUrl("/placeholder.svg?height=200&width=200");
   };
 
@@ -119,6 +116,20 @@ export default function ProductPage({ saveToInventory = () => {} }) {
       reader.onload = (e) => setImageUrl(e.target.result);
       reader.readAsDataURL(file);
     }
+  };
+
+  const handlePriceChange = () => {
+    const price = parseFloat(unitPrice) || 0;
+    const qty = parseInt(quantity) || 0;
+    const costValue = parseFloat(cost) || 0;
+
+    const profit = price - costValue;
+    const revenue = price * qty;
+    const overallProfitValue = profit * qty;
+
+    setProfitPerUnit(profit.toFixed(2));
+    setTotalRevenue(revenue.toFixed(2));
+    setOverallProfit(overallProfitValue.toFixed(2));
   };
 
   const handleSubmit = (e) => {
@@ -164,15 +175,31 @@ export default function ProductPage({ saveToInventory = () => {} }) {
               </div>
               <div className="mb-4">
                 <Label>Pricing</Label>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="price">Price</Label>
+                    <Label htmlFor="unitPrice">Unit Price</Label>
                     <Input
-                      id="price"
+                      id="unitPrice"
                       type="number"
-                      value={price}
-                      onChange={(e) => setPrice(e.target.value)}
+                      value={unitPrice}
+                      onChange={(e) => {
+                        setUnitPrice(e.target.value);
+                        handlePriceChange();
+                      }}
                       placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="quantity">Quantity</Label>
+                    <Input
+                      id="quantity"
+                      type="number"
+                      value={quantity}
+                      onChange={(e) => {
+                        setQuantity(e.target.value);
+                        handlePriceChange();
+                      }}
+                      placeholder="0"
                     />
                   </div>
                   <div>
@@ -181,27 +208,40 @@ export default function ProductPage({ saveToInventory = () => {} }) {
                       id="cost"
                       type="number"
                       value={cost}
-                      onChange={(e) => setCost(e.target.value)}
+                      onChange={(e) => {
+                        setCost(e.target.value);
+                        handlePriceChange();
+                      }}
                       placeholder="0.00"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="profit">Profit</Label>
+                    <Label htmlFor="profit">Profit per Unit</Label>
                     <Input
                       id="profit"
                       type="number"
-                      value={profit}
-                      onChange={(e) => setProfit(e.target.value)}
+                      value={profitPerUnit}
+                      readOnly
                       placeholder="0.00"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="margin">Margin</Label>
+                    <Label htmlFor="overallProfit">Overall Profit</Label>
                     <Input
-                      id="margin"
+                      id="overallProfit"
                       type="number"
-                      value={margin}
-                      onChange={(e) => setMargin(e.target.value)}
+                      value={overallProfit}
+                      readOnly
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="totalRevenue">Total Revenue</Label>
+                    <Input
+                      id="totalRevenue"
+                      type="number"
+                      value={totalRevenue}
+                      readOnly
                       placeholder="0.00"
                     />
                   </div>
@@ -209,16 +249,26 @@ export default function ProductPage({ saveToInventory = () => {} }) {
               </div>
               <div className="mb-4">
                 <Label>Status</Label>
-                <RadioGroup value={status} onValueChange={setStatus}>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="on page" id="on-page" />
-                    <Label htmlFor="on-page">On Page</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="inventory" id="inventory" />
-                    <Label htmlFor="inventory">Inventory</Label>
-                  </div>
-                </RadioGroup>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    value="inventory"
+                    id="inventory"
+                    checked={status === "inventory"}
+                    onChange={() => setStatus("inventory")}
+                    className="mr-2"
+                  />
+                  <Label htmlFor="inventory">Inventory</Label>
+                  <input
+                    type="radio"
+                    value="on-page"
+                    id="on-page"
+                    checked={status === "on-page"}
+                    onChange={() => setStatus("on-page")}
+                    className="mr-2"
+                  />
+                  <Label htmlFor="on-page">On Page</Label>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -231,41 +281,23 @@ export default function ProductPage({ saveToInventory = () => {} }) {
             <CardContent>
               <div className="mb-4">
                 <Label>Product Image</Label>
-                <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                  <div className="text-center">
-                    <ImageIcon
-                      className="mx-auto h-12 w-12 text-gray-300"
-                      aria-hidden="true"
-                    />
-                    <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                      <label
-                        htmlFor="file-upload"
-                        className="relative cursor-pointer rounded-md bg-white font-semibold text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 hover:text-blue-500"
-                      >
-                        <span>Upload a file</span>
-                        <input
-                          id="file-upload"
-                          name="file-upload"
-                          type="file"
-                          className="sr-only"
-                          onChange={handleImageUpload}
-                        />
-                      </label>
-                      <p className="pl-1">or drag and drop</p>
-                    </div>
-                    <p className="text-xs leading-5 text-gray-600">
-                      PNG, JPG, GIF up to 10MB
-                    </p>
-                  </div>
+                <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25">
+                  <Image
+                    src={imageUrl}
+                    alt="Product Image"
+                    width={200}
+                    height={200}
+                    className="object-cover"
+                  />
+                </div>
+                <div className="mt-4">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                  />
                 </div>
               </div>
-              <Image
-                src={imageUrl}
-                alt="Product"
-                className="w-full h-auto rounded-lg"
-                width={200}
-                height={200}
-              />
             </CardContent>
           </Card>
         </div>
