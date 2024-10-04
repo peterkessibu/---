@@ -2,13 +2,10 @@
 import React, { useState } from "react";
 import {
   ShoppingCart,
-  User,
   CreditCard,
-  Eye,
   Smartphone,
   Tablet,
   Monitor,
-  DollarSign,
 } from "lucide-react";
 
 const EcommercePreview = () => {
