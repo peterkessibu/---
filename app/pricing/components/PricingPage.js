@@ -1,62 +1,9 @@
-'use client'
 import { useState } from 'react'
 import { Check, X, Phone } from 'lucide-react'
-
-// Tailwind Components: Button, Input, Card, Badge
-const Button = ({ children, variant = 'default', className = '', ...props }) => {
-  const baseClass = 'px-4 py-2 rounded text-white font-medium'
-  const variants = {
-    default: 'bg-blue-600 hover:bg-blue-700',
-    outline: 'border border-blue-600 text-blue-600 hover:bg-blue-100',
-  }
-  return (
-    <button
-      className={`${baseClass} ${variants[variant]} ${className}`}
-      {...props}
-    >
-      {children}
-    </button>
-  )
-}
-
-const Input = ({ className = '', ...props }) => (
-  <input
-    className={`border border-gray-300 px-4 py-2 rounded w-full ${className}`}
-    {...props}
-  />
-)
-
-const Card = ({ children, className = '', ...props }) => (
-  <div className={`bg-white shadow-lg rounded-lg ${className}`} {...props}>
-    {children}
-  </div>
-)
-
-const CardHeader = ({ children }) => (
-  <div className="p-6 border-b border-gray-200">{children}</div>
-)
-
-const CardTitle = ({ children, className = '' }) => (
-  <h3 className={`text-xl font-bold ${className}`}>{children}</h3>
-)
-
-const CardDescription = ({ children }) => (
-  <p className="mt-2 text-gray-600">{children}</p>
-)
-
-const CardContent = ({ children }) => (
-  <div className="p-6 flex-grow">{children}</div>
-)
-
-const CardFooter = ({ children }) => (
-  <div className="p-6 border-t border-gray-200">{children}</div>
-)
-
-const Badge = ({ children, className = '' }) => (
-  <span className={`bg-yellow-400 text-yellow-900 font-medium px-2 py-1 rounded ${className}`}>
-    {children}
-  </span>
-)
+import { Button } from './Button'
+import { Input } from './Input'
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './Card'
+import { Badge } from './Badge'
 
 export default function PricingPage() {
   const [email, setEmail] = useState('')
