@@ -36,7 +36,6 @@ export default function Homepage() {
         below to launch your store and track your progress.
       </p>
 
-      {/* Setup Guide */}
       <div className="bg-white border border-gray-300 rounded-xl shadow-lg overflow-hidden">
         {/* Header with progress */}
         <div className="p-6 bg-gradient-to-r from-blue-100 to-blue-50">

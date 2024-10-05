@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Image as ImageIcon } from "lucide-react";
+import { useAdmin } from '../../context/AdminContext';
 
 const Button = ({ type, children, onClick }) => (
   <button
@@ -70,7 +71,8 @@ const Card = ({ children }) => (
 
 const CardContent = ({ children }) => <div>{children}</div>;
 
-export default function Component({ saveToInventory = () => {} }) {
+export default function Component() {
+  const { addProduct } = useAdmin();
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -81,9 +83,7 @@ export default function Component({ saveToInventory = () => {} }) {
   const [overallProfit, setOverallProfit] = useState("");
   const [totalRevenue, setTotalRevenue] = useState("");
   const [status, setStatus] = useState("inventory");
-  const [imageUrl, setImageUrl] = useState(
-    "/placeholder.svg?height=200&width=200",
-  );
+  const [imageUrl, setImageUrl] = useState("/placeholder.svg?height=200&width=200");
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSaveProduct = () => {
@@ -92,18 +92,20 @@ export default function Component({ saveToInventory = () => {} }) {
       name: productName,
       description,
       category,
-      unitPrice,
-      quantity,
-      cost,
-      profitPerUnit,
-      overallProfit,
-      totalRevenue,
+      unitPrice: parseFloat(unitPrice),
+      quantity: parseInt(quantity),
+      cost: parseFloat(cost),
+      profitPerUnit: parseFloat(profitPerUnit),
+      overallProfit: parseFloat(overallProfit),
+      totalRevenue: parseFloat(totalRevenue),
       status,
       image: imageUrl,
       dateInput: new Date().toISOString().split("T")[0],
     };
-    saveToInventory(newProduct);
 
+    addProduct(newProduct);
+
+    // Reset form fields
     setProductName("");
     setDescription("");
     setCategory("");
@@ -164,9 +166,7 @@ export default function Component({ saveToInventory = () => {} }) {
                   <Label>Image Preview</Label>
                   <div
                     className="relative w-full h-48 sm:w-48 sm:h-48 mx-auto border border-dashed border-gray-400 flex justify-center items-center cursor-pointer"
-                    onClick={() =>
-                      document.getElementById("imageUpload").click()
-                    }
+                    onClick={() => document.getElementById("imageUpload").click()}
                   >
                     {imageUrl ? (
                       <Image
@@ -228,6 +228,7 @@ export default function Component({ saveToInventory = () => {} }) {
               <div className="mb-4">
                 <Label htmlFor="category">Category</Label>
                 <Select value={category} onValueChange={setCategory}>
+                  <SelectItem value="">Select a category</SelectItem>
                   <SelectItem value="electronics">Electronics</SelectItem>
                   <SelectItem value="clothing">Clothing</SelectItem>
                   <SelectItem value="books">Books</SelectItem>

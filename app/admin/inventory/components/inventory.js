@@ -1,28 +1,9 @@
 import React, { useState } from "react";
 import { Edit, Trash } from "lucide-react";
+import { useAdmin } from "../../context/AdminContext";
 
 const InventoryPage = () => {
-  const [inventory, setInventory] = useState([
-    {
-      id: 1,
-      name: "Product 1",
-      category: "Electronics",
-      price: 99.99,
-      quantity: 10,
-      status: "Inventory",
-      dateAdded: "2024-09-30T11:00:00Z",
-    },
-    {
-      id: 2,
-      name: "Product 2",
-      category: "Apparel",
-      price: 49.99,
-      quantity: 20,
-      status: "E-commerce",
-      dateAdded: "2024-09-30T11:00:00Z",
-    },
-  ]);
-
+  const { inventory, updateInventory } = useAdmin();
   const [searchTerm, setSearchTerm] = useState("");
   const [editId, setEditId] = useState(null);
   const [updatedItem, setUpdatedItem] = useState({});
@@ -33,28 +14,28 @@ const InventoryPage = () => {
   };
 
   const handleDelete = (id) => {
-    setInventory(inventory.filter((item) => item.id !== id));
+    updateInventory(inventory.filter((item) => item.id !== id));
   };
 
   const handleStatusChange = (id, newStatus) => {
-    setInventory(
+    updateInventory(
       inventory.map((item) =>
-        item.id === id ? { ...item, status: newStatus } : item,
-      ),
+        item.id === id ? { ...item, status: newStatus } : item
+      )
     );
   };
 
   const handleSave = (id) => {
-    setInventory(
+    updateInventory(
       inventory.map((item) =>
-        item.id === id ? (editId === id ? updatedItem : item) : item,
-      ),
+        item.id === id ? (editId === id ? updatedItem : item) : item
+      )
     );
     setEditId(null);
   };
 
   const filteredInventory = inventory.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
