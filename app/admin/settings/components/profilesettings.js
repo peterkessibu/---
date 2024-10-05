@@ -61,26 +61,114 @@ export default function ProfileSettings() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-8 max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg"
+    >
       <div className="space-y-6">
         <h2 className="text-2xl font-bold text-gray-900">Profile Settings</h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <InputField label="First Name" name="firstName" required value={formData.firstName} onChange={handleInputChange} errors={errors} />
-          <InputField label="Last Name" name="lastName" required value={formData.lastName} onChange={handleInputChange} errors={errors} />
-          <InputField label="Middle Name" name="middleName" value={formData.middleName} onChange={handleInputChange} />
-          <InputField label="Date of Birth" name="dateOfBirth" type="date" required value={formData.dateOfBirth} onChange={handleInputChange} errors={errors} />
+          <InputField
+            label="First Name"
+            name="firstName"
+            required
+            value={formData.firstName}
+            onChange={handleInputChange}
+            errors={errors}
+          />
+          <InputField
+            label="Last Name"
+            name="lastName"
+            required
+            value={formData.lastName}
+            onChange={handleInputChange}
+            errors={errors}
+          />
+          <InputField
+            label="Middle Name"
+            name="middleName"
+            value={formData.middleName}
+            onChange={handleInputChange}
+          />
+          <InputField
+            label="Date of Birth"
+            name="dateOfBirth"
+            type="date"
+            required
+            value={formData.dateOfBirth}
+            onChange={handleInputChange}
+            errors={errors}
+          />
         </div>
-        <InputField label="Current Residence" name="currentResidence" required value={formData.currentResidence} onChange={handleInputChange} errors={errors} />
-        <InputField label="Student ID Number" name="studentIdNumber" required value={formData.studentIdNumber} onChange={handleInputChange} errors={errors} />
-        <InputField label="School Email" name="schoolEmail" type="email" required value={formData.schoolEmail} onChange={handleInputChange} errors={errors} />
-        <InputField label="Other Email" name="otherEmail" type="email" value={formData.otherEmail} onChange={handleInputChange} />
-        <InputField label="Phone Number" name="phoneNumber" type="tel" required value={formData.phoneNumber} onChange={handleInputChange} errors={errors} />
-        <InputField label="WhatsApp Number" name="whatsappNumber" type="tel" required value={formData.whatsappNumber} onChange={handleInputChange} errors={errors} />
-        <InputField label="Snapchat Username" name="snapchatUsername" value={formData.snapchatUsername} onChange={handleInputChange} />
-        <InputField label="Facebook Username" name="facebookUsername" value={formData.facebookUsername} onChange={handleInputChange} />
+        <InputField
+          label="Current Residence"
+          name="currentResidence"
+          required
+          value={formData.currentResidence}
+          onChange={handleInputChange}
+          errors={errors}
+        />
+        <InputField
+          label="Student ID Number"
+          name="studentIdNumber"
+          required
+          value={formData.studentIdNumber}
+          onChange={handleInputChange}
+          errors={errors}
+        />
+        <InputField
+          label="School Email"
+          name="schoolEmail"
+          type="email"
+          required
+          value={formData.schoolEmail}
+          onChange={handleInputChange}
+          errors={errors}
+        />
+        <InputField
+          label="Other Email"
+          name="otherEmail"
+          type="email"
+          value={formData.otherEmail}
+          onChange={handleInputChange}
+        />
+        <InputField
+          label="Phone Number"
+          name="phoneNumber"
+          type="tel"
+          required
+          value={formData.phoneNumber}
+          onChange={handleInputChange}
+          errors={errors}
+        />
+        <InputField
+          label="WhatsApp Number"
+          name="whatsappNumber"
+          type="tel"
+          required
+          value={formData.whatsappNumber}
+          onChange={handleInputChange}
+          errors={errors}
+        />
+        <InputField
+          label="Snapchat Username"
+          name="snapchatUsername"
+          value={formData.snapchatUsername}
+          onChange={handleInputChange}
+        />
+        <InputField
+          label="Facebook Username"
+          name="facebookUsername"
+          value={formData.facebookUsername}
+          onChange={handleInputChange}
+        />
       </div>
-      <button type="submit" disabled={isLoading} className={`mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-        {isLoading ? 'Saving...' : 'Save Profile Settings'}
+      <button
+        type="submit"
+        disabled={isLoading}
+        className={`mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+      >
+        {isLoading ? "Saving..." : "Save Profile Settings"}
       </button>
     </form>
   );

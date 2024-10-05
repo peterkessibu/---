@@ -1,49 +1,56 @@
-import { Check, X, Phone } from 'lucide-react'
-import { Button } from './Button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './Card'
-import { Badge } from './Badge'
+import { Check, X, Phone } from "lucide-react";
+import { Button } from "./Button";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "./Card";
+import { Badge } from "./Badge";
 
 export default function PricingPage() {
   const plans = [
     {
-      name: 'Basic',
-      price: '$19',
+      name: "Basic",
+      price: "$19",
       features: [
-        'Up to 100 products',
-        'Up to 5 categories',
-        'Inventory limit: 500 items',
-        '2% transaction fee',
-        'Basic analytics',
+        "Up to 100 products",
+        "Up to 5 categories",
+        "Inventory limit: 500 items",
+        "2% transaction fee",
+        "Basic analytics",
       ],
-      notIncluded: ['Customization options'],
+      notIncluded: ["Customization options"],
     },
     {
-      name: 'Pro',
-      price: '$49',
+      name: "Pro",
+      price: "$49",
       features: [
-        'Unlimited products',
-        'Up to 20 categories',
-        'Inventory limit: 5,000 items',
-        '1% transaction fee',
-        'Advanced analytics',
-        'Some customization options',
+        "Unlimited products",
+        "Up to 20 categories",
+        "Inventory limit: 5,000 items",
+        "1% transaction fee",
+        "Advanced analytics",
+        "Some customization options",
       ],
       popular: true,
     },
     {
-      name: 'Enterprise',
-      price: 'Custom',
+      name: "Enterprise",
+      price: "Custom",
       features: [
-        'Unlimited products',
-        'Unlimited categories',
-        'Inventory limit: 50,000 items',
-        '0.5% transaction fee',
-        'Premium support',
-        'Full customization options',
+        "Unlimited products",
+        "Unlimited categories",
+        "Inventory limit: 50,000 items",
+        "0.5% transaction fee",
+        "Premium support",
+        "Full customization options",
       ],
       callForPrice: true,
     },
-  ]
+  ];
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -60,12 +67,23 @@ export default function PricingPage() {
         <div className="mt-12">
           <div className="grid gap-8 lg:grid-cols-3 sm:gap-6 xl:gap-10">
             {plans.map((plan) => (
-              <Card key={plan.name} className={`flex flex-col justify-between ${plan.popular ? 'border-primary shadow-lg' : ''}`}>
+              <Card
+                key={plan.name}
+                className={`flex flex-col justify-between ${plan.popular ? "border-primary shadow-lg" : ""}`}
+              >
                 <CardHeader>
-                  <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
+                  <CardTitle className="text-2xl font-bold">
+                    {plan.name}
+                  </CardTitle>
                   <CardDescription>
-                    <span className="text-4xl font-extrabold">{plan.price}</span>
-                    {plan.name !== 'Enterprise' && <span className="text-base font-medium text-gray-500">/month</span>}
+                    <span className="text-4xl font-extrabold">
+                      {plan.price}
+                    </span>
+                    {plan.name !== "Enterprise" && (
+                      <span className="text-base font-medium text-gray-500">
+                        /month
+                      </span>
+                    )}
                   </CardDescription>
                   {plan.popular && (
                     <Badge className="absolute top-4 right-4">
@@ -78,13 +96,17 @@ export default function PricingPage() {
                     {plan.features.map((feature, index) => (
                       <li key={index} className="flex items-start">
                         <Check className="flex-shrink-0 w-5 h-5 text-green-500" />
-                        <span className="ml-3 text-base text-gray-700">{feature}</span>
+                        <span className="ml-3 text-base text-gray-700">
+                          {feature}
+                        </span>
                       </li>
                     ))}
                     {plan.notIncluded?.map((feature, index) => (
                       <li key={index} className="flex items-start">
                         <X className="flex-shrink-0 w-5 h-5 text-red-500" />
-                        <span className="ml-3 text-base text-gray-700">{feature}</span>
+                        <span className="ml-3 text-base text-gray-700">
+                          {feature}
+                        </span>
                       </li>
                     ))}
                   </ul>
@@ -105,5 +127,5 @@ export default function PricingPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

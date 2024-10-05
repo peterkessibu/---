@@ -2,17 +2,16 @@
 
 import React, { useState } from "react";
 import { PlusIcon, MinusIcon } from "lucide-react";
+import { useAdmin } from "../Context/AdminContext";
 
 export default function Component() {
+  const { addDiscount, discounts } = useAdmin();
   const [newDiscount, setNewDiscount] = useState({
     product: "",
     discountType: "percentage",
     value: "",
     active: false,
   });
-  
-  // Add this line to create a state for discounts
-  const [discounts, setDiscounts] = useState([]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -24,8 +23,7 @@ export default function Component() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Update this line to use setDiscounts
-    setDiscounts(prevDiscounts => [...prevDiscounts, { ...newDiscount, id: Date.now() }]);
+    addDiscount({ ...newDiscount, id: Date.now() });
     setNewDiscount({
       product: "",
       discountType: "percentage",
@@ -36,12 +34,12 @@ export default function Component() {
 
   const toggleDiscountStatus = (id) => {
     // Update this function to use setDiscounts
-    setDiscounts(prevDiscounts =>
+    setDiscounts((prevDiscounts) =>
       prevDiscounts.map((discount) =>
         discount.id === id
           ? { ...discount, active: !discount.active }
-          : discount
-      )
+          : discount,
+      ),
     );
   };
 

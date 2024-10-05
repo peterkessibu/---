@@ -9,9 +9,11 @@ import Label from "./label";
 import Textarea from "./textarea";
 import Select from "./select";
 import SelectItem from "./selectItem";
-import {Card, CardContent} from "./card";
+import { Card, CardContent } from "./card";
+import { useAdmin } from "../../Context/AdminContext";
 
 export default function ProductForm() {
+  const { addProduct } = useAdmin();
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -22,7 +24,9 @@ export default function ProductForm() {
   const [overallProfit, setOverallProfit] = useState("");
   const [totalRevenue, setTotalRevenue] = useState("");
   const [status, setStatus] = useState("inventory");
-  const [imageUrl, setImageUrl] = useState("/placeholder.svg?height=200&width=200");
+  const [imageUrl, setImageUrl] = useState(
+    "/placeholder.svg?height=200&width=200",
+  );
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleSaveProduct = () => {
@@ -104,7 +108,9 @@ export default function ProductForm() {
                   <Label>Image Preview</Label>
                   <div
                     className="relative w-full h-48 sm:w-48 sm:h-48 mx-auto border border-dashed border-gray-400 flex justify-center items-center cursor-pointer"
-                    onClick={() => document.getElementById("imageUpload").click()}
+                    onClick={() =>
+                      document.getElementById("imageUpload").click()
+                    }
                   >
                     {imageUrl ? (
                       <Image
@@ -119,7 +125,9 @@ export default function ProductForm() {
                     )}
                   </div>
                   {errorMessage && (
-                    <p className="text-red-500 text-center mt-2">{errorMessage}</p>
+                    <p className="text-red-500 text-center mt-2">
+                      {errorMessage}
+                    </p>
                   )}
                 </div>
                 <input
@@ -129,7 +137,10 @@ export default function ProductForm() {
                   className="hidden"
                   onChange={handleImageUpload}
                 />
-                <Button type="button" onClick={() => document.getElementById("imageUpload").click()}>
+                <Button
+                  type="button"
+                  onClick={() => document.getElementById("imageUpload").click()}
+                >
                   Upload Image
                 </Button>
               </div>
@@ -256,5 +267,3 @@ export default function ProductForm() {
     </div>
   );
 }
-
-

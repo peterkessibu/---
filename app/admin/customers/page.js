@@ -2,23 +2,10 @@
 
 import React, { useState } from "react";
 import { Clock } from "lucide-react";
+import { useAdmin } from "../Context/AdminContext";
 
 export default function Component() {
-  const currentTime = new Date().toISOString();
-
-  const [customers, setCustomers] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      purchases: [{ item: "Product 1", timestamp: currentTime }],
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      purchases: [],
-    },
-  ]);
-
+  const { customers } = useAdmin();
   const [filter, setFilter] = useState("all");
 
   const filteredCustomers =

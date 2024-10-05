@@ -1,20 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { Edit, Trash } from "lucide-react";
+import { useAdmin } from "../../Context/AdminContext";
 
 const InventoryPage = () => {
+  const { inventory, updateInventory } = useAdmin();
   const [searchTerm, setSearchTerm] = useState("");
   const [editId, setEditId] = useState(null);
   const [updatedItem, setUpdatedItem] = useState({});
-  const [inventory, setInventory] = useState([]);
 
   useEffect(() => {
     // Fetch inventory data from an API or load from somewhere
     // For now, let's use a dummy data
     const dummyInventory = [
-      { id: 1, name: "Product 1", category: "Category 1", price: 10.99, quantity: 100, status: "Inventory", dateAdded: new Date() },
-      { id: 2, name: "Product 2", category: "Category 2", price: 20.99, quantity: 50, status: "E-commerce", dateAdded: new Date() },
+      {
+        id: 1,
+        name: "Product 1",
+        category: "Category 1",
+        price: 10.99,
+        quantity: 100,
+        status: "Inventory",
+        dateAdded: new Date(),
+      },
+      {
+        id: 2,
+        name: "Product 2",
+        category: "Category 2",
+        price: 20.99,
+        quantity: 50,
+        status: "E-commerce",
+        dateAdded: new Date(),
+      },
     ];
-    setInventory(dummyInventory);
+    updateInventory(dummyInventory);
   }, []);
 
   const handleEdit = (item) => {
@@ -23,28 +40,28 @@ const InventoryPage = () => {
   };
 
   const handleDelete = (id) => {
-    setInventory(inventory.filter((item) => item.id !== id));
+    updateInventory(inventory.filter((item) => item.id !== id));
   };
 
   const handleStatusChange = (id, newStatus) => {
-    setInventory(
+    updateInventory(
       inventory.map((item) =>
-        item.id === id ? { ...item, status: newStatus } : item
-      )
+        item.id === id ? { ...item, status: newStatus } : item,
+      ),
     );
   };
 
   const handleSave = (id) => {
-    setInventory(
+    updateInventory(
       inventory.map((item) =>
-        item.id === id ? (editId === id ? updatedItem : item) : item
-      )
+        item.id === id ? (editId === id ? updatedItem : item) : item,
+      ),
     );
     setEditId(null);
   };
 
   const filteredInventory = inventory.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    item.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   return (

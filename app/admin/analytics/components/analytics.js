@@ -18,6 +18,7 @@ import {
   RefreshCcw,
   Calendar,
 } from "lucide-react";
+import { useAdmin } from "../../Context/AdminContext";
 
 // Sample data for the charts
 const initialData = [
@@ -31,16 +32,20 @@ const initialData = [
 ];
 
 export default function AnalyticsPage() {
+  const { analytics } = useAdmin();
   const [dateRange, setDateRange] = useState("7d");
-  const [data, setData] = useState(initialData); // State for data
   const [selectedDate, setSelectedDate] = useState(new Date()); // State for selected date
   const [isCalendarOpen, setCalendarOpen] = useState(false); // State for calendar visibility
   const calendarRef = useRef(null); // Ref for calendar pop-up
 
-  const totalSales = data.reduce((sum, item) => sum + item.sales, 0);
-  const totalProfit = data.reduce((sum, item) => sum + item.profit, 0);
-  const totalSessions = 15234; // Sample data
-  const totalOrders = 1234; // Sample data
+  // Use analytics data from context
+  const totalSales = analytics.product_added || 0;
+  const totalProfit = analytics.discount_added || 0;
+  const totalSessions = analytics.settings_updated || 0;
+  const totalOrders = Object.values(analytics).reduce(
+    (sum, value) => sum + value,
+    0,
+  );
 
   // Function to refresh data
   const refreshData = () => {
