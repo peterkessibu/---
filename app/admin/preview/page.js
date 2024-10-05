@@ -11,7 +11,7 @@ export default function PreviewPage() {
       <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6">
         <p className="font-bold">Important:</p>
         <p>This is a preview of your e-commerce website. To publish and make it live, you need to select a plan first.</p>
-        <Link href="/admin/plans" className="text-blue-500 hover:underline mt-2 inline-block">
+        <Link href="/pricing" className="text-blue-500 hover:underline mt-2 inline-block">
           Choose a Plan
         </Link>
       </div>

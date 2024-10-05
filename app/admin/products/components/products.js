@@ -3,17 +3,15 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Image as ImageIcon } from "lucide-react";
-import { useAdmin } from "../../context/AdminContext";
 import Button from "./button";
 import Input from "./input";
 import Label from "./label";
 import Textarea from "./textarea";
 import Select from "./select";
 import SelectItem from "./selectItem";
-import {Card, CardContent} from "./cards";
+import {Card, CardContent} from "./card";
 
 export default function ProductForm() {
-  const { addProduct } = useAdmin();
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -63,9 +61,9 @@ export default function ProductForm() {
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const validTypes = ["image/jpeg", "image/png", "image/gif"];
+      const validTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!validTypes.includes(file.type)) {
-        setErrorMessage("Please upload a valid image (JPEG, PNG, GIF).");
+        setErrorMessage("Please upload a valid image (JPEG, PNG, JPG).");
         return;
       }
       setErrorMessage("");

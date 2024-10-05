@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState } from 'react';
 
 const AdminContext = createContext();
+console.log('AdminContext created:', AdminContext);
 
 export const AdminProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
@@ -35,4 +36,11 @@ export const AdminProvider = ({ children }) => {
   );
 };
 
-export const useAdmin = () => useContext(AdminContext);
+export const useAdmin = () => {
+  const context = useContext(AdminContext);
+  console.log('useAdmin called, context:', context);
+  if (context === undefined) {
+    throw new Error('useAdmin must be used within an AdminProvider');
+  }
+  return context;
+};
