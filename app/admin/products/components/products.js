@@ -3,75 +3,16 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Image as ImageIcon } from "lucide-react";
-import { useAdmin } from '../../context/AdminContext';
+import { useAdmin } from "../../context/AdminContext";
+import Button from "./button";
+import Input from "./input";
+import Label from "./label";
+import Textarea from "./textarea";
+import Select from "./select";
+import SelectItem from "./selectItem";
+import {Card, CardContent} from "./cards";
 
-const Button = ({ type, children, onClick }) => (
-  <button
-    type={type}
-    onClick={onClick}
-    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-  >
-    {children}
-  </button>
-);
-
-const Input = ({
-  id,
-  type = "text",
-  value,
-  onChange,
-  placeholder,
-  readOnly = false,
-}) => (
-  <input
-    id={id}
-    type={type}
-    value={value}
-    onChange={onChange}
-    placeholder={placeholder}
-    readOnly={readOnly}
-    className="w-full p-2 border border-gray-300 rounded"
-  />
-);
-
-const Label = ({ htmlFor, children }) => (
-  <label htmlFor={htmlFor} className="block text-gray-700 font-medium mb-2">
-    {children}
-  </label>
-);
-
-const Textarea = ({ id, value, onChange, placeholder, rows }) => (
-  <textarea
-    id={id}
-    value={value}
-    onChange={onChange}
-    placeholder={placeholder}
-    rows={rows}
-    className="w-full p-2 border border-gray-300 rounded"
-  />
-);
-
-const Select = ({ value, onValueChange, children }) => (
-  <select
-    value={value}
-    onChange={(e) => onValueChange(e.target.value)}
-    className="w-full p-2 border border-gray-300 rounded"
-  >
-    {children}
-  </select>
-);
-
-const SelectItem = ({ value, children }) => (
-  <option value={value}>{children}</option>
-);
-
-const Card = ({ children }) => (
-  <div className="border rounded-lg p-4 bg-white shadow">{children}</div>
-);
-
-const CardContent = ({ children }) => <div>{children}</div>;
-
-export default function Component() {
+export default function ProductForm() {
   const { addProduct } = useAdmin();
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
@@ -105,7 +46,6 @@ export default function Component() {
 
     addProduct(newProduct);
 
-    // Reset form fields
     setProductName("");
     setDescription("");
     setCategory("");
@@ -181,9 +121,7 @@ export default function Component() {
                     )}
                   </div>
                   {errorMessage && (
-                    <p className="text-red-500 text-center mt-2">
-                      {errorMessage}
-                    </p>
+                    <p className="text-red-500 text-center mt-2">{errorMessage}</p>
                   )}
                 </div>
                 <input
@@ -193,10 +131,7 @@ export default function Component() {
                   className="hidden"
                   onChange={handleImageUpload}
                 />
-                <Button
-                  type="button"
-                  onClick={() => document.getElementById("imageUpload").click()}
-                >
+                <Button type="button" onClick={() => document.getElementById("imageUpload").click()}>
                   Upload Image
                 </Button>
               </div>
@@ -242,19 +177,6 @@ export default function Component() {
                   <div>
                     <Label htmlFor="unitPrice">Unit Price</Label>
                     <Input
-                      id="unitPrice"
-                      type="number"
-                      value={unitPrice}
-                      onChange={(e) => {
-                        setUnitPrice(e.target.value);
-                        handlePriceChange();
-                      }}
-                      placeholder="0.00"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="quantity">Quantity</Label>
-                    <Input
                       id="quantity"
                       type="number"
                       value={quantity}
@@ -266,7 +188,7 @@ export default function Component() {
                     />
                   </div>
                   <div>
-                    <Label htmlFor="cost">Cost per item</Label>
+                    <Label htmlFor="cost">Cost Per Unit</Label>
                     <Input
                       id="cost"
                       type="number"
@@ -278,14 +200,20 @@ export default function Component() {
                       placeholder="0.00"
                     />
                   </div>
+                </div>
+              </div>
+              <div className="mb-4">
+                <Label>Profit and Revenue</Label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
-                    <Label htmlFor="profit">Profit per Unit</Label>
+                    <Label htmlFor="profitPerUnit">Profit Per Unit</Label>
                     <Input
-                      id="profit"
+                      id="profitPerUnit"
                       type="number"
                       value={profitPerUnit}
-                      readOnly
+                      onChange={(e) => setProfitPerUnit(e.target.value)}
                       placeholder="0.00"
+                      readOnly
                     />
                   </div>
                   <div>
@@ -294,8 +222,9 @@ export default function Component() {
                       id="overallProfit"
                       type="number"
                       value={overallProfit}
-                      readOnly
+                      onChange={(e) => setOverallProfit(e.target.value)}
                       placeholder="0.00"
+                      readOnly
                     />
                   </div>
                   <div>
@@ -304,42 +233,30 @@ export default function Component() {
                       id="totalRevenue"
                       type="number"
                       value={totalRevenue}
-                      readOnly
+                      onChange={(e) => setTotalRevenue(e.target.value)}
                       placeholder="0.00"
+                      readOnly
                     />
                   </div>
                 </div>
               </div>
               <div className="mb-4">
-                <Label>Status</Label>
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="radio"
-                    value="inventory"
-                    id="inventory"
-                    checked={status === "inventory"}
-                    onChange={() => setStatus("inventory")}
-                    className="mr-2"
-                  />
-                  <Label htmlFor="inventory">Inventory</Label>
-                  <input
-                    type="radio"
-                    value="on-page"
-                    id="on-page"
-                    checked={status === "on-page"}
-                    onChange={() => setStatus("on-page")}
-                    className="mr-2"
-                  />
-                  <Label htmlFor="on-page">On Page</Label>
-                </div>
+                <Label htmlFor="status">Status</Label>
+                <Select value={status} onValueChange={setStatus}>
+                  <SelectItem value="inventory">Inventory</SelectItem>
+                  <SelectItem value="out-of-stock">Out of Stock</SelectItem>
+                  <SelectItem value="discontinued">Discontinued</SelectItem>
+                </Select>
+              </div>
+              <div className="flex justify-end">
+                <Button type="submit">Save Product</Button>
               </div>
             </CardContent>
           </Card>
-          <div className="mt-8">
-            <Button type="submit">Save Product</Button>
-          </div>
         </form>
       </div>
     </div>
   );
 }
+
+
