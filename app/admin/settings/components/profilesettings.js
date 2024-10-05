@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarIcon } from "lucide-react";
+import InputField from "./input";
 
-export default function Component() {
+export default function ProfileSettings() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
@@ -55,104 +55,33 @@ export default function Component() {
     if (validateForm()) {
       setIsLoading(true);
       console.log(formData);
-      // Simulating API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setIsLoading(false);
     }
   };
 
-  const InputField = ({ label, name, type = "text", required = false }) => (
-    <div className="space-y-1">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
-      <input
-        type={type}
-        id={name}
-        name={name}
-        value={formData[name]}
-        onChange={handleInputChange}
-        className="mt-1 block w-full px-3 py-2 h-12 text-base rounded-md border border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out"
-      />
-      {errors[name] && <p className="text-sm text-red-600">{errors[name]}</p>}
-    </div>
-  );
-
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="space-y-8 max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg"
-    >
+    <form onSubmit={handleSubmit} className="space-y-8 max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
       <div className="space-y-6">
         <h2 className="text-2xl font-bold text-gray-900">Profile Settings</h2>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <InputField label="First Name" name="firstName" required />
-          <InputField label="Last Name" name="lastName" required />
-          <InputField label="Middle Name" name="middleName" />
-          <div className="space-y-1">
-            <label
-              htmlFor="dateOfBirth"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Date of Birth <span className="text-red-500">*</span>
-            </label>
-            <div className="relative">
-              <input
-                type="date"
-                id="dateOfBirth"
-                name="dateOfBirth"
-                value={formData.dateOfBirth}
-                onChange={handleInputChange}
-                className="mt-1 block w-full px-3 py-2 h-12 text-base rounded-md border border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 ease-in-out"
-              />
-              <CalendarIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
-            </div>
-            {errors.dateOfBirth && (
-              <p className="text-sm text-red-600">{errors.dateOfBirth}</p>
-            )}
-          </div>
+          <InputField label="First Name" name="firstName" required value={formData.firstName} onChange={handleInputChange} errors={errors} />
+          <InputField label="Last Name" name="lastName" required value={formData.lastName} onChange={handleInputChange} errors={errors} />
+          <InputField label="Middle Name" name="middleName" value={formData.middleName} onChange={handleInputChange} />
+          <InputField label="Date of Birth" name="dateOfBirth" type="date" required value={formData.dateOfBirth} onChange={handleInputChange} errors={errors} />
         </div>
-        <InputField
-          label="Current Residence"
-          name="currentResidence"
-          required
-        />
-        <InputField label="Student ID Number" name="studentIdNumber" required />
-        <InputField
-          label="School Email"
-          name="schoolEmail"
-          type="email"
-          required
-        />
-        <InputField label="Other Email" name="otherEmail" type="email" />
-        <InputField
-          label="Phone Number"
-          name="phoneNumber"
-          type="tel"
-          required
-        />
-        <InputField
-          label="WhatsApp Number"
-          name="whatsappNumber"
-          type="tel"
-          required
-        />
-        <InputField label="Snapchat Username" name="snapchatUsername" />
-        <InputField label="Facebook Username" name="facebookUsername" />
+        <InputField label="Current Residence" name="currentResidence" required value={formData.currentResidence} onChange={handleInputChange} errors={errors} />
+        <InputField label="Student ID Number" name="studentIdNumber" required value={formData.studentIdNumber} onChange={handleInputChange} errors={errors} />
+        <InputField label="School Email" name="schoolEmail" type="email" required value={formData.schoolEmail} onChange={handleInputChange} errors={errors} />
+        <InputField label="Other Email" name="otherEmail" type="email" value={formData.otherEmail} onChange={handleInputChange} />
+        <InputField label="Phone Number" name="phoneNumber" type="tel" required value={formData.phoneNumber} onChange={handleInputChange} errors={errors} />
+        <InputField label="WhatsApp Number" name="whatsappNumber" type="tel" required value={formData.whatsappNumber} onChange={handleInputChange} errors={errors} />
+        <InputField label="Snapchat Username" name="snapchatUsername" value={formData.snapchatUsername} onChange={handleInputChange} />
+        <InputField label="Facebook Username" name="facebookUsername" value={formData.facebookUsername} onChange={handleInputChange} />
       </div>
-      <div className="pt-5">
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={isLoading}
-            className={`ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out ${
-              isLoading ? "opacity-50 cursor-not-allowed" : ""
-            }`}
-          >
-            {isLoading ? "Saving..." : "Save Profile Settings"}
-          </button>
-        </div>
-      </div>
+      <button type="submit" disabled={isLoading} className={`mt-4 w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+        {isLoading ? 'Saving...' : 'Save Profile Settings'}
+      </button>
     </form>
   );
 }

@@ -1,3 +1,4 @@
+'use client'
 import { useState } from 'react'
 import { Check, X, Phone } from 'lucide-react'
 import { Button } from './Button'
@@ -112,27 +113,6 @@ export default function PricingPage() {
               </Card>
             ))}
           </div>
-        </div>
-
-        <div className="mt-16">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold text-center">Subscribe for Email Receipts</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="flex-grow"
-                />
-                <Button type="submit">Subscribe</Button>
-              </form>
-            </CardContent>
-          </Card>
         </div>
       </div>
     </div>
