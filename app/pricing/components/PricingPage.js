@@ -1,20 +1,9 @@
-'use client'
-import { useState } from 'react'
 import { Check, X, Phone } from 'lucide-react'
 import { Button } from './Button'
-import { Input } from './Input'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from './Card'
 import { Badge } from './Badge'
 
 export default function PricingPage() {
-  const [email, setEmail] = useState('')
-
-  const handleSubscribe = (e) => {
-    e.preventDefault()
-    console.log(`Subscribed with email: ${email}`)
-    setEmail('')
-  }
-
   const plans = [
     {
       name: 'Basic',
