@@ -1,12 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Clock } from "lucide-react";
-import { useAdmin } from "../Context/AdminContext";
 
 export default function Component() {
-  const { customers } = useAdmin();
   const [filter, setFilter] = useState("all");
+  const [customers, setCustomers] = useState([]); 
+
+  useEffect(() => {
+    const dummyCustomers = [
+      { id: 1, name: "Alice", purchases: [] },
+      { id: 2, name: "Bob", purchases: [{ item: "Book", timestamp: Date.now() }] },
+    ];
+    setCustomers(dummyCustomers);
+  }, []);
 
   const filteredCustomers =
     filter === "all"

@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import InputField from "./input";
-import { useAdmin } from "../../Context/AdminContext";
 
 export default function StoreSettings() {
-  const { settings, updateSettings } = useAdmin();
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState(settings);
+  const [formData, setFormData] = useState({}); // Changed from settings to {}
   const [errors, setErrors] = useState({});
+  const [settings ] = useState({})
 
   const paymentMethods = [
     { id: "momo", label: "Mobile Money" },

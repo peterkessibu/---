@@ -2,10 +2,9 @@
 
 import React, { useState } from "react";
 import { PlusIcon, MinusIcon } from "lucide-react";
-import { useAdmin } from "../Context/AdminContext";
 
 export default function Component() {
-  const { addDiscount, discounts } = useAdmin();
+  const [discounts, setDiscounts] = useState([]);
   const [newDiscount, setNewDiscount] = useState({
     product: "",
     discountType: "percentage",

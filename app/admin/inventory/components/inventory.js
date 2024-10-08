@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Edit, Trash } from "lucide-react";
-import { useAdmin } from "../../Context/AdminContext";
 
 const InventoryPage = () => {
-  const { inventory, updateInventory } = useAdmin();
   const [searchTerm, setSearchTerm] = useState("");
   const [editId, setEditId] = useState(null);
   const [updatedItem, setUpdatedItem] = useState({});
+  const [inventory, setInventory] = useState([]);
 
   useEffect(() => {
-    // Fetch inventory data from an API or load from somewhere
-    // For now, let's use a dummy data
     const dummyInventory = [
       {
         id: 1,
@@ -31,7 +28,7 @@ const InventoryPage = () => {
         dateAdded: new Date(),
       },
     ];
-    updateInventory(dummyInventory);
+    setInventory(dummyInventory); // Set inventory state
   }, []);
 
   const handleEdit = (item) => {
@@ -40,11 +37,11 @@ const InventoryPage = () => {
   };
 
   const handleDelete = (id) => {
-    updateInventory(inventory.filter((item) => item.id !== id));
+    setInventory(inventory.filter((item) => item.id !== id));
   };
 
   const handleStatusChange = (id, newStatus) => {
-    updateInventory(
+    setInventory(
       inventory.map((item) =>
         item.id === id ? { ...item, status: newStatus } : item,
       ),
@@ -52,7 +49,7 @@ const InventoryPage = () => {
   };
 
   const handleSave = (id) => {
-    updateInventory(
+    setInventory(
       inventory.map((item) =>
         item.id === id ? (editId === id ? updatedItem : item) : item,
       ),

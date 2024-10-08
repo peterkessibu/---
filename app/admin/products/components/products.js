@@ -10,10 +10,8 @@ import Textarea from "./textarea";
 import Select from "./select";
 import SelectItem from "./selectItem";
 import { Card, CardContent } from "./card";
-import { useAdmin } from "../../Context/AdminContext";
 
 export default function ProductForm() {
-  const { addProduct } = useAdmin();
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");

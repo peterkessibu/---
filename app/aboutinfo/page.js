@@ -25,7 +25,7 @@ export default function FormCarousel() {
 
   const handleContinue = () => {
     if (currentForm === forms.length - 1) {
-      router.push("/admin/home");
+      router.push("/admin");
     } else {
       nextForm();
     }

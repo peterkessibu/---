@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import DatePicker from "react-datepicker"; // Import the date picker
-import "react-datepicker/dist/react-datepicker.css"; // Import CSS for the date picker
+import React, { useState, useEffect, useRef } from "react";
+import DatePicker from "react-datepicker"; 
+import "react-datepicker/dist/react-datepicker.css"; 
 import { Card, CardContent, CardHeader, CardTitle } from "./analyticscard";
 import {
   Select,
@@ -18,7 +18,6 @@ import {
   RefreshCcw,
   Calendar,
 } from "lucide-react";
-import { useAdmin } from "../../Context/AdminContext";
 
 // Sample data for the charts
 const initialData = [
@@ -32,11 +31,20 @@ const initialData = [
 ];
 
 export default function AnalyticsPage() {
-  const { analytics } = useAdmin();
+  const [analytics, setAnalytics] = useState({});
+  useEffect(() => {
+    const dummyAnalytics = {
+      product_added: 100,
+      discount_added: 50,
+      settings_updated: 20,
+    };
+    setAnalytics(dummyAnalytics); 
+  }, []);
+
   const [dateRange, setDateRange] = useState("7d");
-  const [selectedDate, setSelectedDate] = useState(new Date()); // State for selected date
-  const [isCalendarOpen, setCalendarOpen] = useState(false); // State for calendar visibility
-  const calendarRef = useRef(null); // Ref for calendar pop-up
+  const [selectedDate, setSelectedDate] = useState(new Date()); 
+  const [isCalendarOpen, setCalendarOpen] = useState(false); 
+  const calendarRef = useRef(null); 
 
   // Use analytics data from context
   const totalSales = analytics.product_added || 0;
@@ -62,7 +70,7 @@ export default function AnalyticsPage() {
     setSelectedDate(date);
     console.log("Selected date:", date);
     refreshData();
-    setCalendarOpen(false); // Close calendar after date selection
+    setCalendarOpen(false); 
   };
 
   // Close calendar when clicking outside of it
