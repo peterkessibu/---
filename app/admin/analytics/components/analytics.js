@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import DatePicker from "react-datepicker"; 
-import "react-datepicker/dist/react-datepicker.css"; 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { Card, CardContent, CardHeader, CardTitle } from "./analyticscard";
 import {
   Select,
@@ -19,34 +19,27 @@ import {
   Calendar,
 } from "lucide-react";
 
-// Sample data for the charts
-const initialData = [
-  { name: "Jan", sales: 4000, profit: 2400 },
-  { name: "Feb", sales: 3000, profit: 1398 },
-  { name: "Mar", sales: 2000, profit: 9800 },
-  { name: "Apr", sales: 2780, profit: 3908 },
-  { name: "May", sales: 1890, profit: 4800 },
-  { name: "Jun", sales: 2390, profit: 3800 },
-  { name: "Jul", sales: 3490, profit: 4300 },
-];
-
 export default function AnalyticsPage() {
   const [analytics, setAnalytics] = useState({});
+  const [dateRange, setDateRange] = useState("7d");
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isCalendarOpen, setCalendarOpen] = useState(false);
+  const calendarRef = useRef(null);
+
   useEffect(() => {
-    const dummyAnalytics = {
-      product_added: 100,
-      discount_added: 50,
-      settings_updated: 20,
+    const fetchAnalytics = async () => {
+      try {
+        const response = await fetch("/api/analytics");
+        const data = await response.json();
+        setAnalytics(data);
+      } catch (error) {
+        console.error("Error fetching analytics data:", error);
+      }
     };
-    setAnalytics(dummyAnalytics); 
+
+    fetchAnalytics();
   }, []);
 
-  const [dateRange, setDateRange] = useState("7d");
-  const [selectedDate, setSelectedDate] = useState(new Date()); 
-  const [isCalendarOpen, setCalendarOpen] = useState(false); 
-  const calendarRef = useRef(null); 
-
-  // Use analytics data from context
   const totalSales = analytics.product_added || 0;
   const totalProfit = analytics.discount_added || 0;
   const totalSessions = analytics.settings_updated || 0;
@@ -55,32 +48,29 @@ export default function AnalyticsPage() {
     0,
   );
 
-  // Function to refresh data
-  const refreshData = () => {
-    const newData = initialData.map((item) => ({
-      ...item,
-      sales: item.sales + Math.floor(Math.random() * 1000),
-      profit: item.profit + Math.floor(Math.random() * 500),
-    }));
-    setData(newData);
+  const refreshData = async () => {
+    try {
+      const response = await fetch("/api/analytics");
+      const data = await response.json();
+      setAnalytics(data);
+    } catch (error) {
+      console.error("Error refreshing analytics data:", error);
+    }
   };
 
-  // Function to fetch data based on selected date
   const handleDateChange = (date) => {
     setSelectedDate(date);
     console.log("Selected date:", date);
     refreshData();
-    setCalendarOpen(false); 
+    setCalendarOpen(false);
   };
 
-  // Close calendar when clicking outside of it
   const handleClickOutside = (event) => {
     if (calendarRef.current && !calendarRef.current.contains(event.target)) {
       setCalendarOpen(false);
     }
   };
 
-  // Effect to listen for click events outside of the calendar
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => {

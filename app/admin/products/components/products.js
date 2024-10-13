@@ -10,6 +10,8 @@ import Textarea from "./textarea";
 import Select from "./select";
 import SelectItem from "./selectItem";
 import { Card, CardContent } from "./card";
+import { useDispatch } from "react-redux";
+import { addToInventory } from "../../../context/actions/actions";
 
 export default function ProductForm() {
   const [productName, setProductName] = useState("");
@@ -22,30 +24,33 @@ export default function ProductForm() {
   const [overallProfit, setOverallProfit] = useState("");
   const [totalRevenue, setTotalRevenue] = useState("");
   const [status, setStatus] = useState("inventory");
-  const [imageUrl, setImageUrl] = useState(
-    "/placeholder.svg?height=200&width=200",
-  );
+  const [imageUrl, setImageUrl] = useState("/placeholder.svg?height=200&width=200");
   const [errorMessage, setErrorMessage] = useState("");
+  const dispatch = useDispatch();
 
-  const handleSaveProduct = () => {
-    const newProduct = {
-      id: Date.now(),
-      name: productName,
+  const handleSaveProduct = (event) => {
+    event.preventDefault();
+
+    const product = {
+      id: Date.now(), // Generate a unique ID for the product
+      productName,
       description,
       category,
-      unitPrice: parseFloat(unitPrice),
-      quantity: parseInt(quantity),
-      cost: parseFloat(cost),
-      profitPerUnit: parseFloat(profitPerUnit),
-      overallProfit: parseFloat(overallProfit),
-      totalRevenue: parseFloat(totalRevenue),
+      unitPrice,
+      quantity,
+      cost,
+      profitPerUnit,
+      overallProfit,
+      totalRevenue,
       status,
-      image: imageUrl,
-      dateInput: new Date().toISOString().split("T")[0],
+      imageUrl,
+      dateAdded: new Date().toISOString(), // Add date/time added
     };
 
-    addProduct(newProduct);
+    // Dispatch the action to add the product to the inventory
+    dispatch(addToInventory(product));
 
+    // Reset form fields
     setProductName("");
     setDescription("");
     setCategory("");
@@ -89,17 +94,12 @@ export default function ProductForm() {
     setOverallProfit(overallProfitValue.toFixed(2));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    handleSaveProduct();
-  };
-
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 mb-6">
       <h1 className="text-3xl font-bold mb-6">Product Details</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="md:order-2">
-          <Card>
+          <Card className="mb-6">
             <CardContent>
               <div className="flex flex-col items-center">
                 <div className="mb-4 w-full">
@@ -145,7 +145,7 @@ export default function ProductForm() {
             </CardContent>
           </Card>
         </div>
-        <form onSubmit={handleSubmit} className="md:order-1">
+        <form onSubmit={handleSaveProduct} className="md:order-1">
           <Card>
             <CardContent>
               <div className="mb-4">
@@ -173,6 +173,8 @@ export default function ProductForm() {
                   <SelectItem value="">Select a category</SelectItem>
                   <SelectItem value="electronics">Electronics</SelectItem>
                   <SelectItem value="clothing">Clothing</SelectItem>
+                  <SelectItem value="fashion">Fashion</SelectItem>
+                  <SelectItem value="dresses">Dresses</SelectItem>
                   <SelectItem value="books">Books</SelectItem>
                   <SelectItem value="home">Home & Garden</SelectItem>
                   <SelectItem value="toys">Toys & Games</SelectItem>
@@ -184,6 +186,19 @@ export default function ProductForm() {
                   <div>
                     <Label htmlFor="unitPrice">Unit Price</Label>
                     <Input
+                      id="unitPrice"
+                      type="number"
+                      value={unitPrice}
+                      onChange={(e) => {
+                        setUnitPrice(e.target.value);
+                        handlePriceChange();
+                      }}
+                      placeholder="0.00"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="quantity">Quantity</Label>
+                    <Input
                       id="quantity"
                       type="number"
                       value={quantity}
@@ -192,19 +207,6 @@ export default function ProductForm() {
                         handlePriceChange();
                       }}
                       placeholder="0"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="cost">Cost Per Unit</Label>
-                    <Input
-                      id="cost"
-                      type="number"
-                      value={cost}
-                      onChange={(e) => {
-                        setCost(e.target.value);
-                        handlePriceChange();
-                      }}
-                      placeholder="0.00"
                     />
                   </div>
                 </div>
@@ -218,7 +220,6 @@ export default function ProductForm() {
                       id="profitPerUnit"
                       type="number"
                       value={profitPerUnit}
-                      onChange={(e) => setProfitPerUnit(e.target.value)}
                       placeholder="0.00"
                       readOnly
                     />
@@ -229,7 +230,6 @@ export default function ProductForm() {
                       id="overallProfit"
                       type="number"
                       value={overallProfit}
-                      onChange={(e) => setOverallProfit(e.target.value)}
                       placeholder="0.00"
                       readOnly
                     />
@@ -240,14 +240,13 @@ export default function ProductForm() {
                       id="totalRevenue"
                       type="number"
                       value={totalRevenue}
-                      onChange={(e) => setTotalRevenue(e.target.value)}
                       placeholder="0.00"
                       readOnly
                     />
                   </div>
                 </div>
               </div>
-              <div className="mb-4">
+              <div className="mb-4 w-1/2">
                 <Label htmlFor="status">Status</Label>
                 <Select value={status} onValueChange={setStatus}>
                   <SelectItem value="inventory">Inventory</SelectItem>

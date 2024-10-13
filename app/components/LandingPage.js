@@ -34,6 +34,13 @@ export default function LandingPage() {
                 >
                   Start Free Trial
                 </Button>
+                <Button
+                  className="bg-white text-blue-500 hover:bg-blue-50"
+                  size="lg"
+                  onClick={() => router.push("/api/auth/signin")}
+                >
+                  Sign In
+                </Button>
               </div>
             </div>
           </div>

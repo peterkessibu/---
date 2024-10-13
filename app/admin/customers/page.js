@@ -5,12 +5,16 @@ import { Clock } from "lucide-react";
 
 export default function Component() {
   const [filter, setFilter] = useState("all");
-  const [customers, setCustomers] = useState([]); 
+  const [customers, setCustomers] = useState([]);
 
   useEffect(() => {
     const dummyCustomers = [
       { id: 1, name: "Alice", purchases: [] },
-      { id: 2, name: "Bob", purchases: [{ item: "Book", timestamp: Date.now() }] },
+      {
+        id: 2,
+        name: "Bob",
+        purchases: [{ item: "Book", timestamp: Date.now() }],
+      },
     ];
     setCustomers(dummyCustomers);
   }, []);

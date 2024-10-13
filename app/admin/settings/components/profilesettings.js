@@ -63,7 +63,7 @@ export default function ProfileSettings() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-8 max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg"
+      className="space-y-8 w-full mx-auto p-4 bg-white shadow-lg rounded-lg"
     >
       <div className="space-y-6">
         <h2 className="text-2xl font-bold text-gray-900">Profile Settings</h2>

@@ -23,7 +23,11 @@ export default function PreviewPage() {
           Choose a Plan
         </Link>
       </div>
-      <EcommercePreview initialCart={initialCart} initialUser={initialUser} />
+      <EcommercePreview
+        storeName="My Awesome Store"
+        initialCart={initialCart}
+        initialUser={initialUser}
+      />
     </div>
   );
 }

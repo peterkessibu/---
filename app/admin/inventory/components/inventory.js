@@ -1,34 +1,21 @@
+'use client';
 import React, { useState, useEffect } from "react";
 import { Edit, Trash } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { addToEcommercePreview } from "../../../context/actions/actions";
 
 const InventoryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [editId, setEditId] = useState(null);
   const [updatedItem, setUpdatedItem] = useState({});
-  const [inventory, setInventory] = useState([]);
+  const dispatch = useDispatch();
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  // Access the inventory from the Redux store
+  const inventory = useSelector((state) => state.inventory?.inventory || []);
 
   useEffect(() => {
-    const dummyInventory = [
-      {
-        id: 1,
-        name: "Product 1",
-        category: "Category 1",
-        price: 10.99,
-        quantity: 100,
-        status: "Inventory",
-        dateAdded: new Date(),
-      },
-      {
-        id: 2,
-        name: "Product 2",
-        category: "Category 2",
-        price: 20.99,
-        quantity: 50,
-        status: "E-commerce",
-        dateAdded: new Date(),
-      },
-    ];
-    setInventory(dummyInventory); // Set inventory state
+    // Rely on the Redux state for inventory
   }, []);
 
   const handleEdit = (item) => {
@@ -37,29 +24,36 @@ const InventoryPage = () => {
   };
 
   const handleDelete = (id) => {
-    setInventory(inventory.filter((item) => item.id !== id));
+    // Dispatch an action to delete the item from the inventory
   };
 
   const handleStatusChange = (id, newStatus) => {
-    setInventory(
-      inventory.map((item) =>
-        item.id === id ? { ...item, status: newStatus } : item,
-      ),
-    );
+    // Dispatch an action to update the status of the item in the inventory
   };
 
   const handleSave = (id) => {
-    setInventory(
-      inventory.map((item) =>
-        item.id === id ? (editId === id ? updatedItem : item) : item,
-      ),
-    );
+    // Dispatch an action to save the updated item in the inventory
     setEditId(null);
   };
 
   const filteredInventory = inventory.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    item.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleSelection = (itemId) => {
+    setSelectedItems((prevItems) =>
+      prevItems.includes(itemId)
+        ? prevItems.filter((id) => id !== itemId)
+        : [...prevItems, itemId]
+    );
+  };
+
+  const handlePushToEcommerce = () => {
+    const itemsToPush = inventory.filter((item) =>
+      selectedItems.includes(item.id)
+    );
+    dispatch(addToEcommercePreview(itemsToPush));
+  };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -83,7 +77,8 @@ const InventoryPage = () => {
         {filteredInventory.map((item) => (
           <div
             key={item.id}
-            className={`bg-white shadow-lg rounded-lg p-8 relative ${editId === item.id ? "h-auto" : "h-80"}`}
+            className={`bg-white shadow-lg rounded-lg p-8 relative ${editId === item.id ? "h-auto" : "h-80"
+              }`}
           >
             <div className="absolute top-4 right-4 flex space-x-2">
               {editId !== item.id && (
@@ -210,6 +205,25 @@ const InventoryPage = () => {
             )}
           </div>
         ))}
+      </div>
+      <div className="mt-6">
+        {inventory.map((item) => (
+          <div key={item.id} className="flex items-center mb-2">
+            <input
+              type="checkbox"
+              checked={selectedItems.includes(item.id)}
+              onChange={() => handleSelection(item.id)}
+              className="mr-2"
+            />
+            <span>{item.name}</span>
+          </div>
+        ))}
+        <button
+          onClick={handlePushToEcommerce}
+          className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Push to E-commerce
+        </button>
       </div>
     </div>
   );
