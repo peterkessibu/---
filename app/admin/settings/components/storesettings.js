@@ -4,24 +4,7 @@ import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/toast"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Switch } from "@/components/ui/switch"
 
 const formSchema = z.object({
   storeName: z.string().min(2, {
@@ -61,10 +44,11 @@ const formSchema = z.object({
   }),
 })
 
-export function StoreSettingsComponent() {
+export function StoreSettings() {
   const [isLoading, setIsLoading] = useState(false)
+  const [activeTab, setActiveTab] = useState("general")
 
-  const form = useForm < z.infer < typeof formSchema >> ({
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       storeName: "",
@@ -117,345 +101,247 @@ export function StoreSettingsComponent() {
   ]
 
   return (
-    <Form {...form}>
+    <div className="p-6">
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Store Settings</CardTitle>
-            <CardDescription>Manage your store&apos;s general settings and preferences.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="general" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="general">General</TabsTrigger>
-                <TabsTrigger value="payment">Payment</TabsTrigger>
-                <TabsTrigger value="shipping">Shipping</TabsTrigger>
-                <TabsTrigger value="advanced">Advanced</TabsTrigger>
-              </TabsList>
-              <TabsContent value="general">
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="storeName"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Store Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="My Awesome Store" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          This is the name that will be displayed to your customers.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="storeDescription"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Store Description</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Tell customers about your store..."
-                            className="resize-none"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Briefly describe your store and what you sell.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="timezone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Timezone</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a timezone" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="UTC">UTC</SelectItem>
-                            <SelectItem value="EST">EST</SelectItem>
-                            <SelectItem value="PST">PST</SelectItem>
-                            <SelectItem value="CET">CET</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormDescription>
-                          Choose the timezone for your store operations.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="currency"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Currency</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select a currency" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="USD">USD</SelectItem>
-                            <SelectItem value="EUR">EUR</SelectItem>
-                            <SelectItem value="GBP">GBP</SelectItem>
-                            <SelectItem value="JPY">JPY</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormDescription>
-                          Select the primary currency for your store.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </TabsContent>
-              <TabsContent value="payment">
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="paymentMethods"
-                    render={() => (
-                      <FormItem>
-                        <div className="mb-4">
-                          <FormLabel className="text-base">Payment Methods</FormLabel>
-                          <FormDescription>
-                            Select the payment methods you want to offer.
-                          </FormDescription>
-                        </div>
-                        {paymentMethods.map((item) => (
-                          <FormField
-                            key={item.id}
-                            control={form.control}
-                            name="paymentMethods"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={item.id}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(item.id)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([...field.value, item.id])
-                                          : field.onChange(
-                                            field.value?.filter(
-                                              (value) => value !== item.id
-                                            )
-                                          )
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    {item.label}
-                                  </FormLabel>
-                                </FormItem>
-                              )
-                            }}
-                          />
-                        ))}
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </TabsContent>
-              <TabsContent value="shipping">
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="deliveryServices"
-                    render={() => (
-                      <FormItem>
-                        <div className="mb-4">
-                          <FormLabel className="text-base">Delivery Services</FormLabel>
-                          <FormDescription>
-                            Select the delivery services you want to offer.
-                          </FormDescription>
-                        </div>
-                        {deliveryServices.map((item) => (
-                          <FormField
-                            key={item.id}
-                            control={form.control}
-                            name="deliveryServices"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={item.id}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(item.id)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([...field.value, item.id])
-                                          : field.onChange(
-                                            field.value?.filter(
-                                              (value) => value !== item.id
-                                            )
-                                          )
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    {item.label}
-                                  </FormLabel>
-                                </FormItem>
-                              )
-                            }}
-                          />
-                        ))}
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </TabsContent>
-              <TabsContent value="advanced">
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="taxRate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Tax Rate (%)</FormLabel>
-                        <FormControl>
-                          <Input type="number" step="0.01" min="0" max="100" {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          Set the default tax rate for your products.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="orderPrefix"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Order Prefix</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          Set a prefix for your order numbers (e.g., ORD-).
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="invoicePrefix"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Invoice Prefix</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormDescription>
-                          Set a prefix for your invoice numbers (e.g., INV-).
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="allowGuestCheckout"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center justify-between rounded-lg border border-neutral-200 p-4 dark:border-neutral-800">
-                        <div className="space-y-0.5">
-                          <FormLabel className="text-base">
-                            Allow Guest Checkout
-                          </FormLabel>
-                          <FormDescription>
-                            Enable customers to checkout without creating an account.
-                          </FormDescription>
-                        </div>
-                        <FormControl>
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="enableReviews"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center justify-between rounded-lg border border-neutral-200 p-4 dark:border-neutral-800">
-                        <div className="space-y-0.5">
-                          <FormLabel className="text-base">
-                            Enable Product Reviews
-                          </FormLabel>
-                          <FormDescription>
-                            Allow customers to leave reviews on your products.
-                          </FormDescription>
-                        </div>
-                        <FormControl>
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                      </FormItem>
+        <div className="tabs flex space-x-4 mb-6">
+          <button
+            type="button"
+            className={`flex-1 py-2 text-center rounded-lg ${activeTab === "general" ? "bg-indigo-600 text-white" : "bg-gray-200"}`}
+            onClick={() => setActiveTab("general")}
+          >
+            General
+          </button>
+          <button
+            type="button"
+            className={`flex-1 py-2 text-center rounded-lg ${activeTab === "payment" ? "bg-indigo-600 text-white" : "bg-gray-200"}`}
+            onClick={() => setActiveTab("payment")}
+          >
+            Payment
+          </button>
+          <button
+            type="button"
+            className={`flex-1 py-2 text-center rounded-lg ${activeTab === "delivery" ? "bg-indigo-600 text-white" : "bg-gray-200"}`}
+            onClick={() => setActiveTab("delivery")}
+          >
+            Delivery
+          </button>
+          <button
+            type="button"
+            className={`flex-1 py-2 text-center rounded-lg ${activeTab === "advanced" ? "bg-indigo-600 text-white" : "bg-gray-200"}`}
+            onClick={() => setActiveTab("advanced")}
+          >
+            Advanced
+          </button>
+        </div>
 
-                    )}
+        {activeTab === "general" && (
+          <div className="border rounded-lg shadow p-6">
+            <div className="border-b pb-4 mb-4">
+              <h2 className="text-lg font-semibold">Store Settings</h2>
+              <p className="text-sm text-gray-500">
+                Manage your store&apos;s general settings and preferences.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium">Store Name</label>
+                <input
+                  type="text"
+                  placeholder="My Awesome Store"
+                  {...form.register("storeName")}
+                  className="block w-full mt-1 px-3 py-2 border rounded-md"
+                />
+                <p className="text-xs text-gray-500">
+                  This is the name that will be displayed to your customers.
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Store Description</label>
+                <textarea
+                  placeholder="Tell customers about your store..."
+                  {...form.register("storeDescription")}
+                  className="block w-full mt-1 px-3 py-2 border rounded-md resize-none"
+                />
+                <p className="text-xs text-gray-500">Briefly describe your store and what you sell.</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Timezone</label>
+                <select
+                  {...form.register("timezone")}
+                  className="block w-full mt-1 px-3 py-2 border rounded-md"
+                >
+                  <option value="">Select a timezone</option>
+                  <option value="UTC">UTC</option>
+                  <option value="EST">EST</option>
+                  <option value="PST">PST</option>
+                  <option value="CET">CET</option>
+                </select>
+                <p className="text-xs text-gray-500">Choose the timezone for your store operations.</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Currency</label>
+                <select
+                  {...form.register("currency")}
+                  className="block w-full mt-1 px-3 py-2 border rounded-md"
+                >
+                  <option value="">Select a currency</option>
+                  <option value="USD">USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="GBP">GBP</option>
+                  <option value="JPY">JPY</option>
+                </select>
+                <p className="text-xs text-gray-500">Select the primary currency for your store.</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "payment" && (
+          <div className="border rounded-lg shadow p-6">
+            <div className="border-b pb-4 mb-4">
+              <h2 className="text-lg font-semibold">Payment Methods</h2>
+              <p className="text-sm text-gray-500">
+                Select the payment methods you want to offer.
+              </p>
+            </div>
+            <div className="space-y-4">
+              {paymentMethods.map((item) => (
+                <div key={item.id} className="flex items-start space-x-3">
+                  <input
+                    type="checkbox"
+                    {...form.register("paymentMethods")}
+                    value={item.id}
+                    className="mt-1"
                   />
-                  <FormField
-                    control={form.control}
-                    name="enableWishlist"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-center justify-between rounded-lg border border-neutral-200 p-4 dark:border-neutral-800">
-                        <div className="space-y-0.5">
-                          <FormLabel className="text-base">
-                            Enable Wishlist
-                          </FormLabel>
-                          <FormDescription>
-                            Allow customers to create and manage wishlists.
-                          </FormDescription>
-                        </div>
-                        <FormControl>
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
+                  <label className="text-sm font-medium">{item.label}</label>
                 </div>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-          <CardFooter>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save Settings"}
-            </Button>
-          </CardFooter>
-        </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === "delivery" && (
+          <div className="border rounded-lg shadow p-6">
+            <div className="border-b pb-4 mb-4">
+              <h2 className="text-lg font-semibold">Delivery Services</h2>
+              <p className="text-sm text-gray-500">
+                Select the delivery services you want to offer.
+              </p>
+            </div>
+            <div className="space-y-4">
+              {deliveryServices.map((item) => (
+                <div key={item.id} className="flex items-start space-x-3">
+                  <input
+                    type="checkbox"
+                    {...form.register("deliveryServices")}
+                    value={item.id}
+                    className="mt-1"
+                  />
+                  <label className="text-sm font-medium">{item.label}</label>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === "advanced" && (
+          <div className="border rounded-lg shadow p-6">
+            <div className="border-b pb-4 mb-4">
+              <h2 className="text-lg font-semibold">Advanced Settings</h2>
+              <p className="text-sm text-gray-500">
+                Configure advanced settings for your store.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium">Tax Rate (%)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  max="100"
+                  {...form.register("taxRate")}
+                  className="block w-full mt-1 px-3 py-2 border rounded-md"
+                />
+                <p className="text-xs text-gray-500">
+                  Set the default tax rate for your products.
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Order Prefix</label>
+                <input
+                  type="text"
+                  {...form.register("orderPrefix")}
+                  className="block w-full mt-1 px-3 py-2 border rounded-md"
+                />
+                <p className="text-xs text-gray-500">
+                  Set a prefix for your order numbers (e.g., ORD-).
+                </p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium">Invoice Prefix</label>
+                <input
+                  type="text"
+                  {...form.register("invoicePrefix")}
+                  className="block w-full mt-1 px-3 py-2 border rounded-md"
+                />
+                <p className="text-xs text-gray-500">
+                  Set a prefix for your invoice numbers (e.g., INV-).
+                </p>
+              </div>
+              <div className="flex items-center justify-between border p-4 rounded-lg">
+                <div>
+                  <label className="block text-sm font-medium">Allow Guest Checkout</label>
+                  <p className="text-xs text-gray-500">
+                    Enable customers to checkout without creating an account.
+                  </p>
+                </div>
+                <input
+                  type="checkbox"
+                  {...form.register("allowGuestCheckout")}
+                  className="mt-1"
+                />
+              </div>
+              <div className="flex items-center justify-between border p-4 rounded-lg">
+                <div>
+                  <label className="block text-sm font-medium">Enable Product Reviews</label>
+                  <p className="text-xs text-gray-500">
+                    Allow customers to leave reviews on your products.
+                  </p>
+                </div>
+                <input
+                  type="checkbox"
+                  {...form.register("enableReviews")}
+                  className="mt-1"
+                />
+              </div>
+              <div className="flex items-center justify-between border p-4 rounded-lg">
+                <div>
+                  <label className="block text-sm font-medium">Enable Wishlist</label>
+                  <p className="text-xs text-gray-500">
+                    Allow customers to create and manage wishlists.
+                  </p>
+                </div>
+                <input
+                  type="checkbox"
+                  {...form.register("enableWishlist")}
+                  className="mt-1"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="text-right">
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400"
+          >
+            {isLoading ? "Saving..." : "Save Settings"}
+          </button>
+        </div>
       </form>
-    </Form>
+    </div>
   )
 }

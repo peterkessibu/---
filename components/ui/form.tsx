@@ -23,9 +23,7 @@ type FormFieldContextValue<
   name: TName
 }
 
-const FormFieldContext = React.createContext<FormFieldContextValue>(
-  {} as FormFieldContextValue
-)
+const FormFieldContext = React.createContext<FormFieldContextValue>({} as FormFieldContextValue)
 
 const FormField = <
   TFieldValues extends FieldValues = FieldValues,
@@ -67,9 +65,7 @@ type FormItemContextValue = {
   id: string
 }
 
-const FormItemContext = React.createContext<FormItemContextValue>(
-  {} as FormItemContextValue
-)
+const FormItemContext = React.createContext<FormItemContextValue>({} as FormItemContextValue)
 
 const FormItem = React.forwardRef<
   HTMLDivElement,
@@ -79,7 +75,7 @@ const FormItem = React.forwardRef<
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn("space-y-2", className)} {...props} />
+      <div ref={ref} className={`space-y-2 ${className || ""}`} {...props} />
     </FormItemContext.Provider>
   )
 })
@@ -94,7 +90,7 @@ const FormLabel = React.forwardRef<
   return (
     <Label
       ref={ref}
-      className={cn(error && "text-red-500 dark:text-red-900", className)}
+      className={`${error ? "text-red-500 dark:text-red-900" : ""} ${className || ""}`}
       htmlFor={formItemId}
       {...props}
     />
@@ -134,7 +130,7 @@ const FormDescription = React.forwardRef<
     <p
       ref={ref}
       id={formDescriptionId}
-      className={cn("text-[0.8rem] text-neutral-500 dark:text-neutral-400", className)}
+      className={`text-sm text-neutral-500 dark:text-neutral-400 ${className || ""}`}
       {...props}
     />
   )
@@ -156,7 +152,7 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={cn("text-[0.8rem] font-medium text-red-500 dark:text-red-900", className)}
+      className={`text-sm font-medium text-red-500 dark:text-red-900 ${className || ""}`}
       {...props}
     >
       {body}

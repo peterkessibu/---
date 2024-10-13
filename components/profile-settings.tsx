@@ -16,13 +16,12 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { toast } from "@/components/ui/use-toast"
+// import toast  from "@/components/ui/toast"
 
 const formSchema = z.object({
   firstName: z.string().min(2, {
@@ -78,7 +77,7 @@ const formSchema = z.object({
 })
 
 export function ProfileSettingsComponent() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -110,18 +109,20 @@ export function ProfileSettingsComponent() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false)
-      toast({
-        title: "Profile updated",
-        description: "Your profile settings have been successfully updated.",
-      })
-      console.log(values)
-    }, 1000)
-  }
+  // function onSubmit(values: z.infer<typeof formSchema>) {
+  //   setIsLoading(true)
+  //   // Simulate API call
+  //   setTimeout(() => {
+  //     setIsLoading(false)
+  //     toast({
+  //       id: "profile-update-toast", // Unique identifier for the toast
+  //       open: true,  // Function to handle open state changes
+  //       title: "Profile updated",
+  //       description: "Your profile settings have been successfully updated.",
+  //     })
+  //     console.log(values)
+  //   }, 1000)
+  // }
 
   const interests = [
     "Sports",
@@ -140,10 +141,10 @@ export function ProfileSettingsComponent() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card>
-          <CardHeader>
-            <CardTitle>Profile Settings</CardTitle>
-            <CardDescription>Manage your personal information and preferences.</CardDescription>
-          </CardHeader>
+          <div>
+            <h3>Profile Settings</h3>
+            <p>Manage your personal information and preferences.</p>
+          </div>
           <CardContent>
             <Tabs defaultValue="personal" className="w-full">
               <TabsList className="grid w-full grid-cols-4">

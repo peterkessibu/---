@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import ProfileSettingsForm from "./components/profilesettings";
-import OnlineStoreSettingsForm from "./components/storesettings";
+import { ProfileSettings } from "./components/profilesettings";
+import { StoreSettings } from "./components/storesettings";
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("profile");
@@ -29,12 +29,12 @@ export default function SettingsPage() {
         <div>
           {activeTab === "profile" && (
             <div>
-              <ProfileSettingsForm />
+              <ProfileSettings />
             </div>
           )}
           {activeTab === "store" && (
             <div>
-              <OnlineStoreSettingsForm />
+              <StoreSettings />
             </div>
           )}
         </div>
