@@ -177,35 +177,43 @@ export default function AnalyticsPage() {
             Order ID History
           </button>
         </div>
-        <div className="mb-4 flex space-x-2">
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="p-2 border rounded"
-            placeholder="Start Date"
-          />
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="p-2 border rounded"
-            placeholder="End Date"
-          />
-          <button
-            onClick={() => fetchHistory(activeTab)}
-            className="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
-          >
-            Fetch {activeTab === "invoice" ? "Invoice" : "Order ID"} History
-          </button>
+        <div className="mb-4 flex flex-col md:flex-row md:items-center space-y-2 md:space-y-0 md:space-x-2">
+          <div className="flex items-center space-x-2">
+            <p>From</p>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              className="p-2 border rounded"
+              placeholder="Start Date"
+            />
+            <span className="justify-center items-center">- to -</span>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              className="p-2 border rounded"
+              placeholder="End Date"
+            />
+          </div>
+
+          <div className="flex md:ml-auto">
+            <button
+              onClick={() => fetchHistory(activeTab)}
+              className="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
+            >
+              Download {activeTab === "invoice" ? "Invoice" : "Order ID"} History
+            </button>
+          </div>
         </div>
+
         {activeTab === "invoice" && (
           <div>
             <h2 className="text-2xl font-bold mb-4">Invoice History</h2>
             {invoiceHistory.length > 0 ? (
               <ul>
                 {invoiceHistory.map((invoice) => (
-                  <li key={invoice.id}>{invoice.details}</li>
+                  <li key={invoice.id}>{invoice.details} (from {invoice.startDate} to {invoice.endDate})</li>
                 ))}
               </ul>
             ) : (
@@ -219,7 +227,7 @@ export default function AnalyticsPage() {
             {orderHistory.length > 0 ? (
               <ul>
                 {orderHistory.map((order) => (
-                  <li key={order.id}>{order.details}</li>
+                  <li key={order.id}>{order.details} (from {order.startDate} to {order.endDate})</li>
                 ))}
               </ul>
             ) : (
