@@ -66,19 +66,6 @@ export function ProfileSettings() {
     },
   })
 
-  const interests = [
-    "Sports",
-    "Music",
-    "Art",
-    "Technology",
-    "Science",
-    "Literature",
-    "Travel",
-    "Cooking",
-    "Photography",
-    "Gaming",
-  ]
-
   const onSubmit = (values) => {
     setIsLoading(true)
     setTimeout(() => {
@@ -93,38 +80,23 @@ export function ProfileSettings() {
       <h2 className="text-2xl font-bold mb-6">Profile Settings</h2>
       <p className="mb-4">Manage your personal information and preferences.</p>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <div className="tabs flex space-x-4 mb-6">
+          <button
+            type="button"
+            className={`flex-1 py-2 text-center rounded-lg ${activeTab === "personal" ? "bg-indigo-600 text-white" : "bg-gray-200"}`}
+            onClick={() => setActiveTab("personal")}
+          >
+            Personal
+          </button>
+          <button
+            type="button"
+            className={`flex-1 py-2 text-center rounded-lg ${activeTab === "contact" ? "bg-indigo-600 text-white" : "bg-gray-200"}`}
+            onClick={() => setActiveTab("contact")}
+          >
+            Contact
+          </button>
+        </div>
         <div className="bg-white shadow-md rounded-lg p-6">
-          <div className="tabs flex space-x-4 mb-6">
-            <button
-              type="button"
-              className={`flex-1 py-2 text-center rounded-lg ${activeTab === "personal" ? "bg-indigo-600 text-white" : "bg-gray-200"}`}
-              onClick={() => setActiveTab("personal")}
-            >
-              Personal
-            </button>
-            <button
-              type="button"
-              className={`flex-1 py-2 text-center rounded-lg ${activeTab === "contact" ? "bg-indigo-600 text-white" : "bg-gray-200"}`}
-              onClick={() => setActiveTab("contact")}
-            >
-              Contact
-            </button>
-            <button
-              type="button"
-              className={`flex-1 py-2 text-center rounded-lg ${activeTab === "academic" ? "bg-indigo-600 text-white" : "bg-gray-200"}`}
-              onClick={() => setActiveTab("academic")}
-            >
-              Academic
-            </button>
-            <button
-              type="button"
-              className={`flex-1 py-2 text-center rounded-lg ${activeTab === "preferences" ? "bg-indigo-600 text-white" : "bg-gray-200"}`}
-              onClick={() => setActiveTab("preferences")}
-            >
-              Preferences
-            </button>
-          </div>
-
           {activeTab === "personal" && (
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
@@ -152,17 +124,13 @@ export function ProfileSettings() {
               <div>
                 <label className="block mb-1">Gender</label>
                 <div className="flex space-x-4">
-                  {['male', 'female', 'other', 'prefer_not_to_say'].map(value => (
+                  {['male', 'female'].map(value => (
                     <div key={value} className="flex items-center">
                       <input type="radio" className="mr-2" value={value} {...form.register('gender')} />
                       <span>{value.charAt(0).toUpperCase() + value.slice(1)}</span>
                     </div>
                   ))}
                 </div>
-              </div>
-              <div>
-                <label className="block mb-1">Bio</label>
-                <textarea className="border rounded-lg w-full p-2 resize-none" placeholder="Tell us about yourself" {...form.register('bio')} />
               </div>
             </div>
           )}
@@ -196,48 +164,6 @@ export function ProfileSettings() {
                     <input type="text" className="border rounded-lg w-full p-2" placeholder="johndoe" {...form.register(field)} />
                   </div>
                 ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === "academic" && (
-            <div className="space-y-4">
-              <div>
-                <label className="block mb-1">Major</label>
-                <input type="text" className="border rounded-lg w-full p-2" placeholder="Your Major" {...form.register('major')} />
-              </div>
-              <div>
-                <label className="block mb-1">Graduation Year</label>
-                <input type="text" className="border rounded-lg w-full p-2" placeholder="YYYY" {...form.register('graduationYear')} />
-              </div>
-            </div>
-          )}
-
-          {activeTab === "preferences" && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Interests</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                {interests.map(interest => (
-                  <label key={interest} className="flex items-center">
-                    <input type="checkbox" className="mr-2" {...form.register('interests')} value={interest} />
-                    {interest}
-                  </label>
-                ))}
-              </div>
-              <h3 className="text-lg font-semibold">Privacy Settings</h3>
-              <div className="space-y-4">
-                <label className="flex items-center">
-                  <input type="checkbox" {...form.register('privacySettings.showEmail')} className="mr-2" />
-                  Show Email to Others
-                </label>
-                <label className="flex items-center">
-                  <input type="checkbox" {...form.register('privacySettings.showPhone')} className="mr-2" />
-                  Show Phone Number to Others
-                </label>
-                <label className="flex items-center">
-                  <input type="checkbox" {...form.register('privacySettings.showSocialMedia')} className="mr-2" />
-                  Show Social Media Links to Others
-                </label>
               </div>
             </div>
           )}

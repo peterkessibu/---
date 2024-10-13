@@ -24,6 +24,10 @@ export default function AnalyticsPage() {
   const [dateRange, setDateRange] = useState("7d");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [isCalendarOpen, setCalendarOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState("invoice");
+  const [invoiceHistory, setInvoiceHistory] = useState([]);
+  const [orderHistory, setOrderHistory] = useState([]);
+  const [historyDateRange, setHistoryDateRange] = useState([null, null]);
   const calendarRef = useRef(null);
 
   useEffect(() => {
@@ -77,6 +81,28 @@ export default function AnalyticsPage() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const fetchHistory = async (type) => {
+    const [startDate, endDate] = historyDateRange;
+    if (!startDate || !endDate) return;
+
+    try {
+      const response = await fetch(`/api/${type}-history?start=${startDate.toISOString()}&end=${endDate.toISOString()}`);
+      const data = await response.json();
+      if (type === "invoice") {
+        setInvoiceHistory(data);
+      } else {
+        setOrderHistory(data);
+      }
+    } catch (error) {
+      console.error(`Error fetching ${type} history:`, error);
+    }
+  };
+
+  const handleHistoryDateChange = (dates) => {
+    const [start, end] = dates;
+    setHistoryDateRange([start, end]);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -201,6 +227,68 @@ export default function AnalyticsPage() {
             </p>
           </CardContent>
         </Card>
+      </div>
+      <div className="mb-8">
+        <div className="flex space-x-2 mb-4">
+          <button
+            onClick={() => setActiveTab("invoice")}
+            className={`p-2 rounded shadow transition ${activeTab === "invoice" ? "bg-green-500 text-white" : "bg-gray-200"
+              }`}
+          >
+            Invoice History
+          </button>
+          <button
+            onClick={() => setActiveTab("order")}
+            className={`p-2 rounded shadow transition ${activeTab === "order" ? "bg-purple-500 text-white" : "bg-gray-200"
+              }`}
+          >
+            Order ID History
+          </button>
+        </div>
+        <div className="mb-4">
+          <DatePicker
+            selected={historyDateRange[0]}
+            onChange={handleHistoryDateChange}
+            startDate={historyDateRange[0]}
+            endDate={historyDateRange[1]}
+            selectsRange
+            inline
+          />
+          <button
+            onClick={() => fetchHistory(activeTab)}
+            className="mt-2 p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
+          >
+            Fetch {activeTab === "invoice" ? "Invoice" : "Order ID"} History
+          </button>
+        </div>
+        {activeTab === "invoice" && (
+          <div>
+            <h2 className="text-2xl font-bold mb-4">Invoice History</h2>
+            {invoiceHistory.length > 0 ? (
+              <ul>
+                {invoiceHistory.map((invoice) => (
+                  <li key={invoice.id}>{invoice.details}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No invoice history available for the selected date range.</p>
+            )}
+          </div>
+        )}
+        {activeTab === "order" && (
+          <div>
+            <h2 className="text-2xl font-bold mb-4">Order ID History</h2>
+            {orderHistory.length > 0 ? (
+              <ul>
+                {orderHistory.map((order) => (
+                  <li key={order.id}>{order.details}</li>
+                ))}
+              </ul>
+            ) : (
+              <p>No order ID history available for the selected date range.</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -4,7 +4,6 @@ import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { toast } from "@/components/ui/toast"
 
 const formSchema = z.object({
   storeName: z.string().min(2, {
@@ -19,20 +18,18 @@ const formSchema = z.object({
   currency: z.string({
     required_error: "Please select a currency.",
   }),
-  paymentMethods: z.array(z.string()).refine((value) => value.some((item) => item), {
+  paymentMethods: z.array(z.object({
+    method: z.string(),
+    phoneNumber: z.string().optional(),
+    nameConfirmation: z.string().optional(),
+  })).refine((value) => value.some((item) => item.method), {
     message: "You have to select at least one payment method.",
   }),
   deliveryServices: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: "You have to select at least one delivery service.",
   }),
-  taxRate: z.string().regex(/^\d+(\.\d{1,2})?$/, {
-    message: "Tax rate must be a number with up to 2 decimal places.",
-  }),
   orderPrefix: z.string().min(1, {
     message: "Order prefix is required.",
-  }),
-  invoicePrefix: z.string().min(1, {
-    message: "Invoice prefix is required.",
   }),
   allowGuestCheckout: z.boolean(),
   enableReviews: z.boolean(),
@@ -53,13 +50,11 @@ export function StoreSettings() {
     defaultValues: {
       storeName: "",
       storeDescription: "",
-      timezone: "",
-      currency: "",
+      timezone: "GMT",
+      currency: "GHS",
       paymentMethods: [],
       deliveryServices: [],
-      taxRate: "0",
       orderPrefix: "ORD-",
-      invoicePrefix: "INV-",
       allowGuestCheckout: false,
       enableReviews: true,
       enableWishlist: true,
@@ -88,20 +83,18 @@ export function StoreSettings() {
     { id: "momo", label: "Mobile Money" },
     { id: "telecel", label: "Telecel Cash" },
     { id: "at", label: "AT Cash" },
-    { id: "credit_card", label: "Credit Card" },
-    { id: "paypal", label: "PayPal" },
   ]
 
   const deliveryServices = [
     { id: "speedaf", label: "Speedaf" },
-    { id: "dhl", label: "DHL" },
-    { id: "fedex", label: "FedEx" },
-    { id: "ups", label: "UPS" },
+    { id: "ghanapost", label: "Ghana Post" },
     { id: "other", label: "Other" },
   ]
 
   return (
-    <div className="p-6">
+    <div>
+      <h2 className="text-2xl font-bold mb-6">Store Settings</h2>
+      <p className="mb-4">Manage your Store information and preferences.</p>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <div className="tabs flex space-x-4 mb-6">
           <button
@@ -170,11 +163,7 @@ export function StoreSettings() {
                   {...form.register("timezone")}
                   className="block w-full mt-1 px-3 py-2 border rounded-md"
                 >
-                  <option value="">Select a timezone</option>
-                  <option value="UTC">UTC</option>
-                  <option value="EST">EST</option>
-                  <option value="PST">PST</option>
-                  <option value="CET">CET</option>
+                  <option value="GMT">GMT</option>
                 </select>
                 <p className="text-xs text-gray-500">Choose the timezone for your store operations.</p>
               </div>
@@ -184,11 +173,7 @@ export function StoreSettings() {
                   {...form.register("currency")}
                   className="block w-full mt-1 px-3 py-2 border rounded-md"
                 >
-                  <option value="">Select a currency</option>
-                  <option value="USD">USD</option>
-                  <option value="EUR">EUR</option>
-                  <option value="GBP">GBP</option>
-                  <option value="JPY">JPY</option>
+                  <option value="GHS">Ghana Cedis (GHS)</option>
                 </select>
                 <p className="text-xs text-gray-500">Select the primary currency for your store.</p>
               </div>
@@ -206,14 +191,36 @@ export function StoreSettings() {
             </div>
             <div className="space-y-4">
               {paymentMethods.map((item) => (
-                <div key={item.id} className="flex items-start space-x-3">
-                  <input
-                    type="checkbox"
-                    {...form.register("paymentMethods")}
-                    value={item.id}
-                    className="mt-1"
-                  />
-                  <label className="text-sm font-medium">{item.label}</label>
+                <div key={item.id} className="space-y-2">
+                  <div className="flex items-start space-x-3">
+                    <input
+                      type="checkbox"
+                      {...form.register("paymentMethods")}
+                      value={item.id}
+                      className="mt-1"
+                    />
+                    <label className="text-sm font-medium">{item.label}</label>
+                  </div>
+                  {["momo", "telecel", "at"].includes(item.id) && (
+                    <div className="ml-6 space-y-2">
+                      <div>
+                        <label className="block text-sm font-medium">Phone Number (+233)</label>
+                        <input
+                          type="text"
+                          {...form.register(`paymentMethods.${item.id}.phoneNumber`)}
+                          className="block w-full mt-1 px-3 py-2 border rounded-md"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium">Name Confirmation</label>
+                        <input
+                          type="text"
+                          {...form.register(`paymentMethods.${item.id}.nameConfirmation`)}
+                          className="block w-full mt-1 px-3 py-2 border rounded-md"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -253,42 +260,6 @@ export function StoreSettings() {
               </p>
             </div>
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium">Tax Rate (%)</label>
-                <input
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  max="100"
-                  {...form.register("taxRate")}
-                  className="block w-full mt-1 px-3 py-2 border rounded-md"
-                />
-                <p className="text-xs text-gray-500">
-                  Set the default tax rate for your products.
-                </p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium">Order Prefix</label>
-                <input
-                  type="text"
-                  {...form.register("orderPrefix")}
-                  className="block w-full mt-1 px-3 py-2 border rounded-md"
-                />
-                <p className="text-xs text-gray-500">
-                  Set a prefix for your order numbers (e.g., ORD-).
-                </p>
-              </div>
-              <div>
-                <label className="block text-sm font-medium">Invoice Prefix</label>
-                <input
-                  type="text"
-                  {...form.register("invoicePrefix")}
-                  className="block w-full mt-1 px-3 py-2 border rounded-md"
-                />
-                <p className="text-xs text-gray-500">
-                  Set a prefix for your invoice numbers (e.g., INV-).
-                </p>
-              </div>
               <div className="flex items-center justify-between border p-4 rounded-lg">
                 <div>
                   <label className="block text-sm font-medium">Allow Guest Checkout</label>
