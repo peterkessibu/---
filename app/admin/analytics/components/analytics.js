@@ -1,8 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./analyticscard";
 import {
   Select,
@@ -16,19 +14,16 @@ import {
   Users,
   ShoppingCart,
   RefreshCcw,
-  Calendar,
 } from "lucide-react";
 
 export default function AnalyticsPage() {
   const [analytics, setAnalytics] = useState({});
   const [dateRange, setDateRange] = useState("7d");
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [isCalendarOpen, setCalendarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("invoice");
   const [invoiceHistory, setInvoiceHistory] = useState([]);
   const [orderHistory, setOrderHistory] = useState([]);
-  const [historyDateRange, setHistoryDateRange] = useState([null, null]);
-  const calendarRef = useRef(null);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     const fetchAnalytics = async () => {
@@ -62,32 +57,11 @@ export default function AnalyticsPage() {
     }
   };
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    console.log("Selected date:", date);
-    refreshData();
-    setCalendarOpen(false);
-  };
-
-  const handleClickOutside = (event) => {
-    if (calendarRef.current && !calendarRef.current.contains(event.target)) {
-      setCalendarOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   const fetchHistory = async (type) => {
-    const [startDate, endDate] = historyDateRange;
     if (!startDate || !endDate) return;
 
     try {
-      const response = await fetch(`/api/${type}-history?start=${startDate.toISOString()}&end=${endDate.toISOString()}`);
+      const response = await fetch(`/api/${type}-history?start=${startDate}&end=${endDate}`);
       const data = await response.json();
       if (type === "invoice") {
         setInvoiceHistory(data);
@@ -99,52 +73,10 @@ export default function AnalyticsPage() {
     }
   };
 
-  const handleHistoryDateChange = (dates) => {
-    const [start, end] = dates;
-    setHistoryDateRange([start, end]);
-  };
-
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Analytics Dashboard</h1>
       <div className="flex flex-col md:flex-row md:justify-between mb-6">
-        <div className="flex items-center mb-4 md:mb-0">
-          <div className="relative">
-            <button
-              onClick={() => setCalendarOpen(!isCalendarOpen)}
-              className="flex items-center border rounded-md p-2 bg-white shadow-sm hover:shadow-md transition"
-              aria-label="Open calendar"
-            >
-              <Calendar className="h-5 w-5 text-gray-600" />
-            </button>
-            {isCalendarOpen && (
-              <div
-                ref={calendarRef}
-                className="absolute z-50 bg-white border rounded-md mt-2 shadow-lg"
-                style={{ left: "calc(100% + 0px)", top: "4" }}
-              >
-                <div className="flex justify-between items-center p-2 border-b">
-                  <h2 className="font-medium">Select a Date</h2>
-                  <button
-                    onClick={() => setCalendarOpen(false)}
-                    className="text-gray-500 hover:text-gray-800"
-                    aria-label="Close calendar"
-                  >
-                    &times;
-                  </button>
-                </div>
-                <DatePicker
-                  selected={selectedDate}
-                  onChange={handleDateChange}
-                  dateFormat="MMMM d, yyyy"
-                  maxDate={new Date()}
-                  inline
-                  className="border-none"
-                />
-              </div>
-            )}
-          </div>
-        </div>
         <Select
           value={dateRange}
           onValueChange={setDateRange}
@@ -245,18 +177,24 @@ export default function AnalyticsPage() {
             Order ID History
           </button>
         </div>
-        <div className="mb-4">
-          <DatePicker
-            selected={historyDateRange[0]}
-            onChange={handleHistoryDateChange}
-            startDate={historyDateRange[0]}
-            endDate={historyDateRange[1]}
-            selectsRange
-            inline
+        <div className="mb-4 flex space-x-2">
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="p-2 border rounded"
+            placeholder="Start Date"
+          />
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="p-2 border rounded"
+            placeholder="End Date"
           />
           <button
             onClick={() => fetchHistory(activeTab)}
-            className="mt-2 p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
+            className="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
           >
             Fetch {activeTab === "invoice" ? "Invoice" : "Order ID"} History
           </button>
