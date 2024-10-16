@@ -9,8 +9,8 @@ const formSchema = z.object({
   storeName: z.string().min(2, {
     message: "Store name must be at least 2 characters.",
   }),
-  storeDescription: z.string().max(500, {
-    message: "Store description must not exceed 500 characters.",
+  storeDescription: z.string().max(150, {
+    message: "Store description must not exceed 150 characters.",
   }),
   timezone: z.string({
     required_error: "Please select a timezone.",

@@ -1,33 +1,48 @@
-import EcommercePreview from "./components/EcommercePreview";
-import Link from "next/link";
+import React, { useState, useRef } from 'react';
+import Header from './components/header';
+import Nav from './components/nav';
+import FeaturedProducts from './components/featuredproducts';
+import Footer from './components/footer';
 
-export default function PreviewPage() {
-  const initialCart = [
-    { id: 1, name: "Wireless Earbuds", unitPrice: 79.99, quantity: 1 },
-  ];
-  const initialUser = { name: "John Doe" };
+export default function EcommercePreview({ initialCart = [], initialUser = null }) {
+  const [cart, setCart] = useState(initialCart);
+  const [user, setUser] = useState(initialUser);
+  const [cartOpen, setCartOpen] = useState(false);
+  const cartRef = useRef(null);
+
+  const handleAddToCart = (item) => {
+    const existingItem = cart.find((cartItem) => cartItem.id === item.id);
+    if (existingItem) {
+      setCart(
+        cart.map((cartItem) =>
+          cartItem.id === item.id
+            ? { ...cartItem, quantity: cartItem.quantity + 1 }
+            : cartItem,
+        ),
+      );
+    } else {
+      setCart([...cart, { ...item, quantity: 1 }]);
+    }
+  };
+
+  const toggleCart = () => setCartOpen(!cartOpen);
+
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">E-commerce Website Preview</h1>
-      <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6">
-        <p className="font-bold">Important:</p>
-        <p>
-          This is a preview of your e-commerce website. To publish and make it
-          live, you need to select a plan first.
-        </p>
-        <Link
-          href="/pricing"
-          className="text-blue-500 hover:underline mt-2 inline-block"
-        >
-          Choose a Plan
-        </Link>
-      </div>
-      <EcommercePreview
-        storeName="My Awesome Store"
-        initialCart={initialCart}
-        initialUser={initialUser}
+    <div className="space-y-4">
+      <Header
+        user={user}
+        setUser={setUser}
+        cart={cart}
+        toggleCart={toggleCart}
+        cartOpen={cartOpen}
+        cartRef={cartRef}
+        totalItems={totalItems}
       />
+      <Nav />
+      <FeaturedProducts handleAddToCart={handleAddToCart} />
+      <Footer />
     </div>
   );
 }
