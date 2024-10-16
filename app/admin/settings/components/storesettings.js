@@ -1,9 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
+import axios from "axios"
 
 const formSchema = z.object({
   storeName: z.string().min(2, {
@@ -65,19 +66,32 @@ export function StoreSettings() {
       },
     },
   })
+  useEffect(() => {
+    const fetchStoreSettings = async () => {
+      try {
+        const response = await axios.get('/api/AdminApi/store');
+        setStoreSettings(response.data);
+      } catch (error) {
+        console.error('Failed to fetch store settings:', error);
+      }
+    };
 
-  function onSubmit(values) {
-    setIsLoading(true)
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false)
-      toast({
-        title: "Settings updated",
-        description: "Your store settings have been successfully updated.",
-      })
-      console.log(values)
-    }, 1000)
-  }
+    fetchStoreSettings();
+  }, []);
+
+  const onSubmit = async (values) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.post('/api/AdminApi/storeSettings', values);
+      alert('Store settings updated successfully.');
+      console.log(response.data);
+    } catch (error) {
+      console.error('Failed to save store settings:', error);
+      alert('Failed to save store settings.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const paymentMethods = [
     { id: "momo", label: "Mobile Money" },
@@ -90,6 +104,7 @@ export function StoreSettings() {
     { id: "ghanapost", label: "Ghana Post" },
     { id: "other", label: "Other" },
   ]
+
 
   return (
     <div>

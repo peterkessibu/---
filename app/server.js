@@ -1,5 +1,9 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
+import personalSettingsHandler from './api/auth/AdminApi/personalSettings.js';
+import storeSettingsHandler from './api/auth/AdminApi/storeSetting.js';
+import productHandler from './api/auth/AdminApi/product.js';
+import categoryHandler from './api/auth/AdminApi/category.js';
 
 const prisma = new PrismaClient();
 const app = express();
@@ -13,182 +17,20 @@ const errorHandler = (err, req, res, next) => {
     res.status(500).json({ error: 'Internal Server Error' });
 };
 
+// Add the error handler middleware
+app.use(errorHandler);
+
 // Store Settings CRUD
-app.get('/api/store-settings', async (req, res) => {
-    try {
-        const storeSettings = await prisma.storeSettings.findFirst();
-        res.json(storeSettings);
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
-
-app.post('/api/store-settings', async (req, res) => {
-    try {
-        const storeSettings = await prisma.storeSettings.create({ data: req.body });
-        res.status(201).json(storeSettings);
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
-
-app.put('/api/store-settings/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const storeSettings = await prisma.storeSettings.update({
-            where: { id: parseInt(id) },
-            data: req.body,
-        });
-        res.json(storeSettings);
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
-
-app.delete('/api/store-settings/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        await prisma.storeSettings.delete({ where: { id: parseInt(id) } });
-        res.json({ message: 'Store settings deleted' });
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
+app.use('/api/store-settings', storeSettingsHandler);
 
 // Personal Settings CRUD
-app.get('/api/personal-settings', async (req, res) => {
-    try {
-        const personalSettings = await prisma.personalSettings.findFirst();
-        res.json(personalSettings);
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
-
-app.post('/api/personal-settings', async (req, res) => {
-    try {
-        const personalSettings = await prisma.personalSettings.create({ data: req.body });
-        res.status(201).json(personalSettings);
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
-
-app.put('/api/personal-settings/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const personalSettings = await prisma.personalSettings.update({
-            where: { id: parseInt(id) },
-            data: req.body,
-        });
-        res.json(personalSettings);
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
-
-app.delete('/api/personal-settings/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        await prisma.personalSettings.delete({ where: { id: parseInt(id) } });
-        res.json({ message: 'Personal settings deleted' });
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
+app.use('/api/personal-settings', personalSettingsHandler);
 
 // Category CRUD
-app.get('/api/inventory/categories', async (req, res) => {
-    try {
-        const categories = await prisma.category.findMany();
-        res.json({ categories: categories.map(category => category.name) });
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
-
-app.post('/api/inventory/categories', async (req, res) => {
-    try {
-        const category = await prisma.category.create({ data: req.body });
-        res.status(201).json(category);
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
-
-app.put('/api/inventory/categories/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const category = await prisma.category.update({
-            where: { id: parseInt(id) },
-            data: req.body,
-        });
-        res.json(category);
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
-
-app.delete('/api/inventory/categories/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        await prisma.category.delete({ where: { id: parseInt(id) } });
-        res.json({ message: 'Category deleted' });
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
+app.use('/api/AdminApi/categories', categoryHandler);
 
 // Product CRUD
-app.get('/api/inventory/featured', async (req, res) => {
-    try {
-        const products = await prisma.product.findMany({ where: { featured: true } });
-        res.json({ products });
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
-
-app.get('/api/inventory/products', async (req, res) => {
-    try {
-        const products = await prisma.product.findMany();
-        res.json({ products });
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
-
-app.post('/api/inventory/products', async (req, res) => {
-    try {
-        const product = await prisma.product.create({ data: req.body });
-        res.status(201).json(product);
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
-
-app.put('/api/inventory/products/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        const product = await prisma.product.update({
-            where: { id: parseInt(id) },
-            data: req.body,
-        });
-        res.json(product);
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
-
-app.delete('/api/inventory/products/:id', async (req, res) => {
-    const { id } = req.params;
-    try {
-        await prisma.product.delete({ where: { id: parseInt(id) } });
-        res.json({ message: 'Product deleted' });
-    } catch (error) {
-        errorHandler(error, req, res);
-    }
-});
+app.use('/api/AdminApi/products', productHandler);
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
