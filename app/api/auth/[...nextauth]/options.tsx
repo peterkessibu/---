@@ -1,14 +1,11 @@
-import type { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions, Profile as NextAuthProfile } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { Profile as NextAuthProfile } from "next-auth";
 
-// Extend the Profile interface globally
-declare module "next-auth" {
-  interface Profile extends NextAuthProfile {
-    email_verified?: boolean;
-  }
+// Define a new type for the extended profile
+interface ExtendedProfile extends NextAuthProfile {
+  email_verified?: boolean;
 }
 
 export const options: NextAuthOptions = {
@@ -37,8 +34,7 @@ export const options: NextAuthOptions = {
       async authorize(
         credentials: { username: string; password: string } | undefined,
       ) {
-        //retrieve user data
-        //verify user data
+        // Retrieve and verify user data
         const user = { id: "42", name: "Me", password: "me0000" };
 
         if (
@@ -57,21 +53,11 @@ export const options: NextAuthOptions = {
       console.log("Sign in attempt:", { user, account, profile });
 
       if (account?.provider === "google") {
-        // Extend the Profile interface
-        interface ExtendedProfile extends Profile {
-          email_verified?: boolean; // Add this line to include email_verified
-        }
-        // Use ExtendedProfile in your code
-        const userProfile: ExtendedProfile = {
-          /* your user data */
-        };
-
-        // Use the userProfile variable to avoid the unused variable error
-        console.log(userProfile); // Example usage
+        const userProfile: ExtendedProfile = profile as ExtendedProfile;
 
         // Ensure the email is verified and ends with the desired domain
         return !!(
-          profile?.email_verified && profile.email?.endsWith("@example.com")
+          userProfile.email_verified && userProfile.email?.endsWith("@example.com")
         );
       }
       return true; // Allow sign-in for other providers
