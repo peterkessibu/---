@@ -1,10 +1,13 @@
-import React, { useState, useRef } from 'react';
-import Header from './components/header';
-import Nav from './components/nav';
-import FeaturedProducts from './components/featuredproducts';
-import Footer from './components/footer';
+import React, { useState, useRef } from "react";
+import Header from "./header";
+import Nav from "./nav";
+import FeaturedProducts from "./featuredproducts";
+import Footer from "./footer";
 
-export default function EcommercePreview({ initialCart = [], initialUser = null }) {
+export default function EcommercePreview({
+  initialCart = [],
+  initialUser = null,
+}) {
   const [cart, setCart] = useState(initialCart);
   const [user, setUser] = useState(initialUser);
   const [cartOpen, setCartOpen] = useState(false);

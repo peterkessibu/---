@@ -37,7 +37,7 @@ export default function LandingPage() {
                 <Button
                   className="bg-white text-blue-500 hover:bg-blue-50"
                   size="lg"
-                  onClick={() => router.push("/api/auth/signin")}
+                  onClick={() => router.push("/api/auth/sign-in")}
                 >
                   Sign In
                 </Button>

@@ -1,8 +1,8 @@
-'use client';
+"use client";
 import React, { useState } from "react";
 import { Edit, Trash } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { addToEcommercePreview, setInventory } from "../../../context/actions/actions";
+import { addToEcommercePreview } from "../../../context/actions/actions";
 import { useProductInventory } from "@/app/context/ProductInventoryContext";
 
 const InventoryPage = () => {
@@ -13,7 +13,7 @@ const InventoryPage = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  const { setInventory} = useProductInventory();
+  const { setInventory } = useProductInventory();
 
   // Access the inventory from the Redux store
   const inventory = useSelector((state) => state.inventory?.inventory || []);
@@ -25,34 +25,34 @@ const InventoryPage = () => {
 
   const handleStatusChange = (id, newStatus) => {
     const updatedInventory = inventory.map((item) =>
-      item.id === id ? { ...item, status: newStatus } : item
+      item.id === id ? { ...item, status: newStatus } : item,
     );
     dispatch(setInventory(updatedInventory));
   };
 
   const handleSave = (id) => {
     const updatedInventory = inventory.map((item) =>
-      item.id === id ? updatedItem : item
+      item.id === id ? updatedItem : item,
     );
     dispatch(setInventory(updatedInventory));
     setEditId(null);
   };
 
   const filteredInventory = inventory.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    item.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   const handleSelection = (itemId) => {
     setSelectedItems((prevItems) =>
       prevItems.includes(itemId)
         ? prevItems.filter((id) => id !== itemId)
-        : [...prevItems, itemId]
+        : [...prevItems, itemId],
     );
   };
 
   const handlePushToEcommerce = () => {
     const itemsToPush = inventory.filter((item) =>
-      selectedItems.includes(item.id)
+      selectedItems.includes(item.id),
     );
     dispatch(addToEcommercePreview(itemsToPush));
   };
@@ -60,7 +60,10 @@ const InventoryPage = () => {
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredInventory.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredInventory.slice(
+    indexOfFirstItem,
+    indexOfLastItem,
+  );
   const totalPages = Math.ceil(filteredInventory.length / itemsPerPage);
 
   const handleNextPage = () => {
@@ -97,8 +100,9 @@ const InventoryPage = () => {
         {currentItems.map((item) => (
           <div
             key={item.id}
-            className={`bg-white shadow-lg rounded-lg p-8 relative ${editId === item.id ? "h-auto" : "h-80"
-              }`}
+            className={`bg-white shadow-lg rounded-lg p-8 relative ${
+              editId === item.id ? "h-auto" : "h-80"
+            }`}
           >
             <div className="absolute top-4 right-4 flex space-x-2">
               {editId !== item.id && (
@@ -110,7 +114,9 @@ const InventoryPage = () => {
                     <Edit className="w-5 h-5 mr-1" />
                   </button>
                   <button
-                    onClick={() => setInventory(inventory.filter(i => i.id !== item.id))}
+                    onClick={() =>
+                      setInventory(inventory.filter((i) => i.id !== item.id))
+                    }
                     className="flex items-center text-red-600 hover:text-red-800 transition-colors"
                   >
                     <Trash className="w-5 h-5 mr-1" />

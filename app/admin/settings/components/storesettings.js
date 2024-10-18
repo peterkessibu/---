@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import axios from "axios"
+import { useState, useEffect } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import axios from "axios";
 
 const formSchema = z.object({
   storeName: z.string().min(2, {
@@ -19,16 +19,22 @@ const formSchema = z.object({
   currency: z.string({
     required_error: "Please select a currency.",
   }),
-  paymentMethods: z.array(z.object({
-    method: z.string(),
-    phoneNumber: z.string().optional(),
-    nameConfirmation: z.string().optional(),
-  })).refine((value) => value.some((item) => item.method), {
-    message: "You have to select at least one payment method.",
-  }),
-  deliveryServices: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: "You have to select at least one delivery service.",
-  }),
+  paymentMethods: z
+    .array(
+      z.object({
+        method: z.string(),
+        phoneNumber: z.string().optional(),
+        nameConfirmation: z.string().optional(),
+      }),
+    )
+    .refine((value) => value.some((item) => item.method), {
+      message: "You have to select at least one payment method.",
+    }),
+  deliveryServices: z
+    .array(z.string())
+    .refine((value) => value.some((item) => item), {
+      message: "You have to select at least one delivery service.",
+    }),
   orderPrefix: z.string().min(1, {
     message: "Order prefix is required.",
   }),
@@ -36,15 +42,27 @@ const formSchema = z.object({
   enableReviews: z.boolean(),
   enableWishlist: z.boolean(),
   socialMedia: z.object({
-    facebook: z.string().url({ message: "Please enter a valid URL" }).optional().or(z.literal("")),
-    instagram: z.string().url({ message: "Please enter a valid URL" }).optional().or(z.literal("")),
-    twitter: z.string().url({ message: "Please enter a valid URL" }).optional().or(z.literal("")),
+    facebook: z
+      .string()
+      .url({ message: "Please enter a valid URL" })
+      .optional()
+      .or(z.literal("")),
+    instagram: z
+      .string()
+      .url({ message: "Please enter a valid URL" })
+      .optional()
+      .or(z.literal("")),
+    twitter: z
+      .string()
+      .url({ message: "Please enter a valid URL" })
+      .optional()
+      .or(z.literal("")),
   }),
-})
+});
 
 export function StoreSettings() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [activeTab, setActiveTab] = useState("general")
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState("general");
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -65,14 +83,14 @@ export function StoreSettings() {
         twitter: "",
       },
     },
-  })
+  });
   useEffect(() => {
     const fetchStoreSettings = async () => {
       try {
-        const response = await axios.get('/api/AdminApi/store');
+        const response = await axios.get("/api/AdminApi/store");
         setStoreSettings(response.data);
       } catch (error) {
-        console.error('Failed to fetch store settings:', error);
+        console.error("Failed to fetch store settings:", error);
       }
     };
 
@@ -82,12 +100,12 @@ export function StoreSettings() {
   const onSubmit = async (values) => {
     setIsLoading(true);
     try {
-      const response = await axios.post('/api/AdminApi/storeSettings', values);
-      alert('Store settings updated successfully.');
+      const response = await axios.post("/api/AdminApi/storeSettings", values);
+      alert("Store settings updated successfully.");
       console.log(response.data);
     } catch (error) {
-      console.error('Failed to save store settings:', error);
-      alert('Failed to save store settings.');
+      console.error("Failed to save store settings:", error);
+      alert("Failed to save store settings.");
     } finally {
       setIsLoading(false);
     }
@@ -97,14 +115,13 @@ export function StoreSettings() {
     { id: "momo", label: "Mobile Money" },
     { id: "telecel", label: "Telecel Cash" },
     { id: "at", label: "AT Cash" },
-  ]
+  ];
 
   const deliveryServices = [
     { id: "speedaf", label: "Speedaf" },
     { id: "ghanapost", label: "Ghana Post" },
     { id: "other", label: "Other" },
-  ]
-
+  ];
 
   return (
     <div>
@@ -164,13 +181,17 @@ export function StoreSettings() {
                 </p>
               </div>
               <div>
-                <label className="block text-sm font-medium">Store Description</label>
+                <label className="block text-sm font-medium">
+                  Store Description
+                </label>
                 <textarea
                   placeholder="Tell customers about your store..."
                   {...form.register("storeDescription")}
                   className="block w-full mt-1 px-3 py-2 border rounded-md resize-none"
                 />
-                <p className="text-xs text-gray-500">Briefly describe your store and what you sell.</p>
+                <p className="text-xs text-gray-500">
+                  Briefly describe your store and what you sell.
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-medium">Timezone</label>
@@ -180,7 +201,9 @@ export function StoreSettings() {
                 >
                   <option value="GMT">GMT</option>
                 </select>
-                <p className="text-xs text-gray-500">Choose the timezone for your store operations.</p>
+                <p className="text-xs text-gray-500">
+                  Choose the timezone for your store operations.
+                </p>
               </div>
               <div>
                 <label className="block text-sm font-medium">Currency</label>
@@ -190,7 +213,9 @@ export function StoreSettings() {
                 >
                   <option value="GHS">Ghana Cedis (GHS)</option>
                 </select>
-                <p className="text-xs text-gray-500">Select the primary currency for your store.</p>
+                <p className="text-xs text-gray-500">
+                  Select the primary currency for your store.
+                </p>
               </div>
             </div>
           </div>
@@ -219,18 +244,26 @@ export function StoreSettings() {
                   {["momo", "telecel", "at"].includes(item.id) && (
                     <div className="ml-6 space-y-2">
                       <div>
-                        <label className="block text-sm font-medium">Phone Number (+233)</label>
+                        <label className="block text-sm font-medium">
+                          Phone Number (+233)
+                        </label>
                         <input
                           type="text"
-                          {...form.register(`paymentMethods.${item.id}.phoneNumber`)}
+                          {...form.register(
+                            `paymentMethods.${item.id}.phoneNumber`,
+                          )}
                           className="block w-full mt-1 px-3 py-2 border rounded-md"
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium">Name Confirmation</label>
+                        <label className="block text-sm font-medium">
+                          Name Confirmation
+                        </label>
                         <input
                           type="text"
-                          {...form.register(`paymentMethods.${item.id}.nameConfirmation`)}
+                          {...form.register(
+                            `paymentMethods.${item.id}.nameConfirmation`,
+                          )}
                           className="block w-full mt-1 px-3 py-2 border rounded-md"
                         />
                       </div>
@@ -277,7 +310,9 @@ export function StoreSettings() {
             <div className="space-y-4">
               <div className="flex items-center justify-between border p-4 rounded-lg">
                 <div>
-                  <label className="block text-sm font-medium">Allow Guest Checkout</label>
+                  <label className="block text-sm font-medium">
+                    Allow Guest Checkout
+                  </label>
                   <p className="text-xs text-gray-500">
                     Enable customers to checkout without creating an account.
                   </p>
@@ -290,7 +325,9 @@ export function StoreSettings() {
               </div>
               <div className="flex items-center justify-between border p-4 rounded-lg">
                 <div>
-                  <label className="block text-sm font-medium">Enable Product Reviews</label>
+                  <label className="block text-sm font-medium">
+                    Enable Product Reviews
+                  </label>
                   <p className="text-xs text-gray-500">
                     Allow customers to leave reviews on your products.
                   </p>
@@ -303,7 +340,9 @@ export function StoreSettings() {
               </div>
               <div className="flex items-center justify-between border p-4 rounded-lg">
                 <div>
-                  <label className="block text-sm font-medium">Enable Wishlist</label>
+                  <label className="block text-sm font-medium">
+                    Enable Wishlist
+                  </label>
                   <p className="text-xs text-gray-500">
                     Allow customers to create and manage wishlists.
                   </p>
@@ -329,5 +368,5 @@ export function StoreSettings() {
         </div>
       </form>
     </div>
-  )
+  );
 }

@@ -2,7 +2,14 @@ import type { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { Profile } from "next-auth";
+import { Profile as NextAuthProfile } from "next-auth";
+
+// Extend the Profile interface globally
+declare module "next-auth" {
+  interface Profile extends NextAuthProfile {
+    email_verified?: boolean;
+  }
+}
 
 export const options: NextAuthOptions = {
   providers: [

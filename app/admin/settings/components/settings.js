@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { ProfileSettings } from "./components/profilesettings";
-import { StoreSettings } from "./components/storesettings";
+import { ProfileSettings } from "./profilesettings";
+import { StoreSettings } from "./storesettings";
 
 export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState("profile");

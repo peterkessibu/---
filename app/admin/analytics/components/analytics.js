@@ -9,12 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./analyticsselect";
-import {
-  DollarSign,
-  Users,
-  ShoppingCart,
-  RefreshCcw,
-} from "lucide-react";
+import { DollarSign, Users, ShoppingCart, RefreshCcw } from "lucide-react";
 
 export default function AnalyticsPage() {
   const [analytics, setAnalytics] = useState({});
@@ -61,7 +56,9 @@ export default function AnalyticsPage() {
     if (!startDate || !endDate) return;
 
     try {
-      const response = await fetch(`/api/${type}-history?start=${startDate}&end=${endDate}`);
+      const response = await fetch(
+        `/api/${type}-history?start=${startDate}&end=${endDate}`,
+      );
       const data = await response.json();
       if (type === "invoice") {
         setInvoiceHistory(data);
@@ -164,15 +161,19 @@ export default function AnalyticsPage() {
         <div className="flex space-x-2 mb-4">
           <button
             onClick={() => setActiveTab("invoice")}
-            className={`p-2 rounded shadow transition ${activeTab === "invoice" ? "bg-green-500 text-white" : "bg-gray-200"
-              }`}
+            className={`p-2 rounded shadow transition ${
+              activeTab === "invoice"
+                ? "bg-green-500 text-white"
+                : "bg-gray-200"
+            }`}
           >
             Invoice History
           </button>
           <button
             onClick={() => setActiveTab("order")}
-            className={`p-2 rounded shadow transition ${activeTab === "order" ? "bg-purple-500 text-white" : "bg-gray-200"
-              }`}
+            className={`p-2 rounded shadow transition ${
+              activeTab === "order" ? "bg-purple-500 text-white" : "bg-gray-200"
+            }`}
           >
             Order ID History
           </button>
@@ -202,7 +203,8 @@ export default function AnalyticsPage() {
               onClick={() => fetchHistory(activeTab)}
               className="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 transition"
             >
-              Download {activeTab === "invoice" ? "Invoice" : "Order ID"} History
+              Download {activeTab === "invoice" ? "Invoice" : "Order ID"}{" "}
+              History
             </button>
           </div>
         </div>
@@ -213,7 +215,10 @@ export default function AnalyticsPage() {
             {invoiceHistory.length > 0 ? (
               <ul>
                 {invoiceHistory.map((invoice) => (
-                  <li key={invoice.id}>{invoice.details} (from {invoice.startDate} to {invoice.endDate})</li>
+                  <li key={invoice.id}>
+                    {invoice.details} (from {invoice.startDate} to{" "}
+                    {invoice.endDate})
+                  </li>
                 ))}
               </ul>
             ) : (
@@ -227,7 +232,9 @@ export default function AnalyticsPage() {
             {orderHistory.length > 0 ? (
               <ul>
                 {orderHistory.map((order) => (
-                  <li key={order.id}>{order.details} (from {order.startDate} to {order.endDate})</li>
+                  <li key={order.id}>
+                    {order.details} (from {order.startDate} to {order.endDate})
+                  </li>
                 ))}
               </ul>
             ) : (

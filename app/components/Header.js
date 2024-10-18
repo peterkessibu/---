@@ -63,7 +63,7 @@ export function Header() {
         {/* "Start Free Trial" button on the left side of menu */}
         <Link
           className="text-white bg-blue-500 px-3 py-2 rounded hover:bg-blue-600 transition duration-300 mr-4"
-          href="/start"
+          href="/aboutinfo"
         >
           Start free trial
         </Link>
@@ -97,7 +97,7 @@ export function Header() {
           </a>
           <Link
             className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition duration-300"
-            href="#"
+            href="/api/auth/sign-in"
           >
             Sign In
           </Link>

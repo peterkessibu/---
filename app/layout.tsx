@@ -2,9 +2,9 @@
 
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
-import { ProductInventoryProvider } from './context/ProductInventoryContext';
-import { Provider } from 'react-redux';
-import store from './context/store'; // Adjust the path as necessary
+import { ProductInventoryProvider } from "./context/ProductInventoryContext";
+import { Provider } from "react-redux";
+import store from "./context/store"; // Adjust the path as necessary
 
 export default function RootLayout({
   children,
