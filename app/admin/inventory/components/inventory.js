@@ -1,9 +1,9 @@
 'use client';
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Edit, Trash } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import { addToEcommercePreview, setInventory, updateInventoryItem, deleteInventoryItem } from "../../../context/actions/actions";
+import { addToEcommercePreview, setInventory } from "../../../context/actions/actions";
+import { useProductInventory } from "@/app/context/ProductInventoryContext";
 
 const InventoryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -13,35 +13,14 @@ const InventoryPage = () => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const { setInventory} = useProductInventory();
 
   // Access the inventory from the Redux store
   const inventory = useSelector((state) => state.inventory?.inventory || []);
 
-  useEffect(() => {
-    const fetchInventory = async () => {
-      try {
-        const response = await axios.get('/api/AdminApi/product');
-        dispatch(setInventory(response.data));
-      } catch (error) {
-        console.error('Failed to fetch inventory:', error);
-      }
-    };
-
-    fetchInventory();
-  }, [dispatch]);
-
   const handleEdit = (item) => {
     setEditId(item.id);
     setUpdatedItem({ ...item });
-  };
-
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`/api/AdminApi/product/${id}`);
-      dispatch(deleteInventoryItem(id));
-    } catch (error) {
-      console.error('Failed to delete item:', error);
-    }
   };
 
   const handleStatusChange = (id, newStatus) => {
@@ -51,14 +30,12 @@ const InventoryPage = () => {
     dispatch(setInventory(updatedInventory));
   };
 
-  const handleSave = async (id) => {
-    try {
-      const response = await axios.put(`/api/AdminApi/product/${id}`, updatedItem);
-      dispatch(updateInventoryItem(response.data));
-      setEditId(null);
-    } catch (error) {
-      console.error('Failed to save item:', error);
-    }
+  const handleSave = (id) => {
+    const updatedInventory = inventory.map((item) =>
+      item.id === id ? updatedItem : item
+    );
+    dispatch(setInventory(updatedInventory));
+    setEditId(null);
   };
 
   const filteredInventory = inventory.filter((item) =>
@@ -133,7 +110,7 @@ const InventoryPage = () => {
                     <Edit className="w-5 h-5 mr-1" />
                   </button>
                   <button
-                    onClick={() => handleDelete(item.id)}
+                    onClick={() => setInventory(inventory.filter(i => i.id !== item.id))}
                     className="flex items-center text-red-600 hover:text-red-800 transition-colors"
                   >
                     <Trash className="w-5 h-5 mr-1" />
@@ -236,14 +213,6 @@ const InventoryPage = () => {
                   <strong>Date/Time Added:</strong>{" "}
                   {new Date(item.dateAdded).toLocaleString()}
                 </p>
-                <div className="mt-4">
-                  <button
-                    onClick={() => handleSave(item.id)}
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-colors w-1/4"
-                  >
-                    Save
-                  </button>
-                </div>
               </>
             )}
           </div>

@@ -1,26 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Clock } from "lucide-react";
 
 export default function Component() {
   const [filter, setFilter] = useState("all");
-  const [customers, setCustomers] = useState([]);
-
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await fetch("/api/customers");
-        const data = await response.json();
-        setCustomers(data.customers);
-        setIsAuthenticated(data.isAuthenticated);
-      } catch (error) {
-        console.error("Error fetching customer data:", error);
-      }
-    };
-
-    fetchCustomers();
-  }, []);
+  const [customers] = useState([]);
 
   const filteredCustomers =
     filter === "all"
