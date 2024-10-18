@@ -1,8 +1,8 @@
-"use client";
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Image as ImageIcon } from "lucide-react";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addToInventory } from "../../../context/actions/actions";
 import Button from "./button";
 import Input from "./input";
 import Label from "./label";
@@ -10,10 +10,9 @@ import Textarea from "./textarea";
 import Select from "./select";
 import SelectItem from "./selectItem";
 import { Card, CardContent } from "./card";
-import { useDispatch } from "react-redux";
-import { addToInventory } from "../../../context/actions/actions";
+import { ImageIcon } from "lucide-react";
 
-export default function ProductForm() {
+export default function Product() {
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -25,14 +24,32 @@ export default function ProductForm() {
   const [totalRevenue, setTotalRevenue] = useState("");
   const [status, setStatus] = useState("inventory");
   const [imageUrl, setImageUrl] = useState("/placeholder.svg?height=200&width=200");
+  const [imageFile, setImageFile] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
 
-  const handleSaveProduct = (event) => {
-    event.preventDefault();
+  // Load form data from localStorage when the component mounts
+  useEffect(() => {
+    const savedData = JSON.parse(localStorage.getItem("productFormData"));
+    if (savedData) {
+      setProductName(savedData.productName || "");
+      setDescription(savedData.description || "");
+      setCategory(savedData.category || "");
+      setUnitPrice(savedData.unitPrice || "");
+      setQuantity(savedData.quantity || "");
+      setCost(savedData.cost || "");
+      setProfitPerUnit(savedData.profitPerUnit || "");
+      setOverallProfit(savedData.overallProfit || "");
+      setTotalRevenue(savedData.totalRevenue || "");
+      setStatus(savedData.status || "inventory");
+      setImageUrl(savedData.imageUrl || "/placeholder.svg?height=200&width=200");
+      setImageFile(savedData.imageFile || null);
+    }
+  }, []);
 
-    const product = {
-      id: Date.now(), // Generate a unique ID for the product
+  // Save form data to localStorage whenever it changes
+  useEffect(() => {
+    const formData = {
       productName,
       description,
       category,
@@ -44,25 +61,50 @@ export default function ProductForm() {
       totalRevenue,
       status,
       imageUrl,
-      dateAdded: new Date().toISOString(), // Add date/time added
+      imageFile,
     };
+    localStorage.setItem("productFormData", JSON.stringify(formData));
+  }, [productName, description, category, unitPrice, quantity, cost, profitPerUnit, overallProfit, totalRevenue, status, imageUrl, imageFile]);
 
-    // Dispatch the action to add the product to the inventory
-    dispatch(addToInventory(product));
+  const handleSaveProduct = async (event) => {
+    event.preventDefault();
 
-    // Reset form fields
-    setProductName("");
-    setDescription("");
-    setCategory("");
-    setUnitPrice("");
-    setQuantity("");
-    setCost("");
-    setProfitPerUnit("");
-    setOverallProfit("");
-    setTotalRevenue("");
-    setStatus("inventory");
-    setImageUrl("/placeholder.svg?height=200&width=200");
-    setErrorMessage("");
+    const formData = new FormData();
+    formData.append('name', productName);
+    formData.append('description', description);
+    formData.append('category_id', category);
+    formData.append('price', parseFloat(unitPrice));
+    formData.append('inventory_quantity', parseInt(quantity));
+    if (imageFile) {
+      formData.append('image', imageFile);
+    }
+
+    try {
+      const response = await axios.post('/api/AdminApi/product', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      dispatch(addToInventory(response.data));
+      // Clear form fields and localStorage
+      setProductName("");
+      setDescription("");
+      setCategory("");
+      setUnitPrice("");
+      setQuantity("");
+      setCost("");
+      setProfitPerUnit("");
+      setOverallProfit("");
+      setTotalRevenue("");
+      setStatus("inventory");
+      setImageUrl("/placeholder.svg?height=200&width=200");
+      setImageFile(null);
+      setErrorMessage("");
+      localStorage.removeItem("productFormData");
+    } catch (error) {
+      console.error('Failed to save product:', error);
+      setErrorMessage('Failed to save product.');
+    }
   };
 
   const handleImageUpload = (event) => {
@@ -74,6 +116,7 @@ export default function ProductForm() {
         return;
       }
       setErrorMessage("");
+      setImageFile(file);
       const reader = new FileReader();
       reader.onload = (e) => setImageUrl(e.target.result);
       reader.readAsDataURL(file);
@@ -171,13 +214,13 @@ export default function ProductForm() {
                 <Label htmlFor="category">Category</Label>
                 <Select value={category} onValueChange={setCategory}>
                   <SelectItem value="">Select a category</SelectItem>
-                  <SelectItem value="electronics">Electronics</SelectItem>
-                  <SelectItem value="clothing">Clothing</SelectItem>
-                  <SelectItem value="fashion">Fashion</SelectItem>
-                  <SelectItem value="dresses">Dresses</SelectItem>
-                  <SelectItem value="books">Books</SelectItem>
-                  <SelectItem value="home">Home & Garden</SelectItem>
-                  <SelectItem value="toys">Toys & Games</SelectItem>
+                  <SelectItem value="1">Electronics</SelectItem>
+                  <SelectItem value="2">Clothing</SelectItem>
+                  <SelectItem value="3">Fashion</SelectItem>
+                  <SelectItem value="4">Dresses</SelectItem>
+                  <SelectItem value="5">Books</SelectItem>
+                  <SelectItem value="6">Home & Garden</SelectItem>
+                  <SelectItem value="7">Toys & Games</SelectItem>
                 </Select>
               </div>
               <div className="mb-4">

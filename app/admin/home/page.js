@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  Home,
   ListCheck,
   Package,
   Users,
@@ -16,7 +15,7 @@ import {
   ArrowRight,
   Info,
 } from "lucide-react";
-import InventoryTrackingPage from "../inventory/page";
+import InventoryPage from "../inventory/page";
 import ProductPage from "../products/page";
 import AnalyticsPage from "../analytics/page";
 import SettingsPage from "../settings/page";
@@ -40,7 +39,7 @@ function ProductSection() {
 function InventorySection() {
   return (
     <div>
-      <InventoryTrackingPage />
+      <InventoryPage />
     </div>
   );
 }

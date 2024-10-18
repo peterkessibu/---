@@ -1,10 +1,10 @@
 // page.js
-import Inventory from "./components/inventory";
+import InventoryPage from "./components/inventory";
 
-export default function Page() {
+export default function InventorySection() {
   return (
     <div className="h-screen w-full">
-      <Inventory />
+      <InventoryPage />
     </div>
   );
 }

@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { Edit, Trash } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { addToEcommercePreview } from "../../../context/actions/actions";
+import axios from "axios";
+import { addToEcommercePreview, setInventory, updateInventoryItem, deleteInventoryItem } from "../../../context/actions/actions";
 
 const InventoryPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -10,30 +11,54 @@ const InventoryPage = () => {
   const [updatedItem, setUpdatedItem] = useState({});
   const dispatch = useDispatch();
   const [selectedItems, setSelectedItems] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Access the inventory from the Redux store
   const inventory = useSelector((state) => state.inventory?.inventory || []);
 
   useEffect(() => {
-    // Rely on the Redux state for inventory
-  }, []);
+    const fetchInventory = async () => {
+      try {
+        const response = await axios.get('/api/AdminApi/product');
+        dispatch(setInventory(response.data));
+      } catch (error) {
+        console.error('Failed to fetch inventory:', error);
+      }
+    };
+
+    fetchInventory();
+  }, [dispatch]);
 
   const handleEdit = (item) => {
     setEditId(item.id);
     setUpdatedItem({ ...item });
   };
 
-  const handleDelete = (id) => {
-    // Dispatch an action to delete the item from the inventory
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`/api/AdminApi/product/${id}`);
+      dispatch(deleteInventoryItem(id));
+    } catch (error) {
+      console.error('Failed to delete item:', error);
+    }
   };
 
   const handleStatusChange = (id, newStatus) => {
-    // Dispatch an action to update the status of the item in the inventory
+    const updatedInventory = inventory.map((item) =>
+      item.id === id ? { ...item, status: newStatus } : item
+    );
+    dispatch(setInventory(updatedInventory));
   };
 
-  const handleSave = (id) => {
-    // Dispatch an action to save the updated item in the inventory
-    setEditId(null);
+  const handleSave = async (id) => {
+    try {
+      const response = await axios.put(`/api/AdminApi/product/${id}`, updatedItem);
+      dispatch(updateInventoryItem(response.data));
+      setEditId(null);
+    } catch (error) {
+      console.error('Failed to save item:', error);
+    }
   };
 
   const filteredInventory = inventory.filter((item) =>
@@ -55,6 +80,24 @@ const InventoryPage = () => {
     dispatch(addToEcommercePreview(itemsToPush));
   };
 
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredInventory.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredInventory.length / itemsPerPage);
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
       <h2 className="text-3xl font-bold mb-6 text-gray-800">Inventory</h2>
@@ -74,7 +117,7 @@ const InventoryPage = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredInventory.map((item) => (
+        {currentItems.map((item) => (
           <div
             key={item.id}
             className={`bg-white shadow-lg rounded-lg p-8 relative ${editId === item.id ? "h-auto" : "h-80"
@@ -205,6 +248,25 @@ const InventoryPage = () => {
             )}
           </div>
         ))}
+      </div>
+      <div className="flex justify-between items-center mt-6">
+        <button
+          onClick={handlePreviousPage}
+          disabled={currentPage === 1}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+        >
+          Previous
+        </button>
+        <span className="text-gray-700">
+          Page {currentPage} of {totalPages}
+        </span>
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+        >
+          Next
+        </button>
       </div>
       <div className="mt-6">
         {inventory.map((item) => (
